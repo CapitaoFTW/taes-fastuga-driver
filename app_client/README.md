@@ -9,3 +9,5 @@ npm install
 ```sh
 npm run dev
 ```
+
+- Copiar o url do site e colar em app_client/main.js na constante "serverBaseUrl"
