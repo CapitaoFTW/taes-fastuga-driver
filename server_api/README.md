@@ -15,4 +15,4 @@ php artisan storage:link
 ```sh
 php artisan passport:install
 ```
-- Copiar o token do Client 2 e colar em server_api/app/Http/Controllers/api/AuthController na constante "CLIENT_SECRET"
+- Copiar o token do Client 2 (que aparece na consola) e colar em server_api/app/Http/Controllers/api/AuthController na constante "CLIENT_SECRET"
