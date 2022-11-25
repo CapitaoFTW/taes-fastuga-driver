@@ -5,6 +5,7 @@ use App\Http\Controllers\api\UserController;
 use App\Http\Controllers\api\AuthController;
 
 Route::post('login', [AuthController::class, 'login']);
+Route::post('register', [AuthController::class, 'register']);
 
 Route::middleware('auth:api')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
@@ -17,5 +18,7 @@ Route::middleware('auth:api')->group(function () {
         ->middleware('can:update,user');
     Route::patch('users/{user}/password', [UserController::class, 'update_password'])
         ->middleware('can:updatePassword,user');
+
+    
 });
 

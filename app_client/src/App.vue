@@ -112,10 +112,11 @@ const clickMenuOption = () => {
             </h6>
             <ul class="nav flex-column mb-2">
               <li class="nav-item" v-show="!userStore.user">
-                <a class="nav-link" href="#">
+                <router-link class="nav-link" :class="{ active: $route.name === 'Register' }" :to="{ name: 'Register' }"
+              @click="clickMenuOption">
                   <i class="bi bi-person-check-fill"></i>
                   Register
-                </a>
+                </router-link>
               </li>
               <li class="nav-item" v-show="!userStore.user">
                 <router-link class="nav-link" :class="{ active: $route.name === 'Login' }" :to="{ name: 'Login' }"

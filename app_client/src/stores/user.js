@@ -64,6 +64,16 @@ export const useUserStore = defineStore('user', () => {
             return false
         }
     }
+
+    async function register (credentials) {
+        try {
+            await axios.post('register', credentials)
+            return true       
+        } 
+        catch(error) {
+            return false
+        }
+    }
     
     async function logout () {
         try {
@@ -86,5 +96,5 @@ export const useUserStore = defineStore('user', () => {
         return false
     }
     
-    return { user, inProgressProjects, userId, userPhotoUrl, login, logout, restoreToken }
+    return { user, inProgressProjects, userId, userPhotoUrl, login, register, logout, restoreToken }
 })

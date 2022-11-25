@@ -5,6 +5,7 @@ import HomeView from '../views/HomeView.vue'
 
 import Dashboard from "../components/Dashboard.vue"
 import Login from "../components/auth/Login.vue"
+import Register from "../components/auth/Register.vue"
 import ChangePassword from "../components/auth/ChangePassword.vue"
 import Users from "../components/users/Users.vue"
 import User from "../components/users/User.vue"
@@ -28,6 +29,12 @@ const router = createRouter({
       path: '/login',
       name: 'Login',
       component: Login
+    },
+    {
+      path:'/register',
+      name: 'Register',
+      component: Register
+      
     },
     {
       path: '/password',

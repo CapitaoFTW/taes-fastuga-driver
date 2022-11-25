@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 
 const PASSPORT_SERVER_URL = "http://server_api.test";
 const CLIENT_ID = 2;
-const CLIENT_SECRET = 'b5vKFWrNoZ5ggdGIB87tuBs2yAIhjbQsDNQJ3Eo4';
+const CLIENT_SECRET = 'PFO5Cy929x7KdpOahQvsxE6wSjETYVmvfVSfHlvN';
 
 class AuthController extends Controller
 {
@@ -21,6 +21,14 @@ class AuthController extends Controller
            'password' => $password,
            'scope' => ''
        ];
+    }
+    public function validator(array $data)
+    {
+        return Validator::make($data, [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
     }
 
     public function login(Request $request)
@@ -45,5 +53,22 @@ class AuthController extends Controller
         $token->revoke();
         $token->delete();
         return response(['msg' => 'Token revoked'], 200);
+    }
+
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+
+        event(new Registered($user = $this->create($request->all())));
+
+        $this->guard()->login($user);
+
+        if ($response = $this->registered($request, $user)) {
+            return $response;
+        }
+
+        return $request->wantsJson()
+            ? new Response('', 201)
+            : redirect($this->redirectPath());
     }
 }

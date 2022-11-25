@@ -15,7 +15,7 @@ import "bootstrap"
 
 const app = createApp(App)
 
-const serverBaseUrl = 'http://server_api.test'
+const serverBaseUrl = 'http://localhost:8080'
 app.provide('axios', axios.create({
     baseURL: serverBaseUrl + '/api',
     headers: {
