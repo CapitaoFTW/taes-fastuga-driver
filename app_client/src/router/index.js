@@ -26,15 +26,14 @@ const router = createRouter({
       props: route => ({ redirectTo: route.params.redirectTo})   
     },
     {
-      path: '/login',
-      name: 'Login',
-      component: Login
-    },
-    {
       path:'/register',
       name: 'Register',
       component: Register
-      
+    },
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login
     },
     {
       path: '/password',
@@ -90,7 +89,7 @@ router.beforeEach((to, from, next) => {
   }
 
   const userStore = useUserStore()  
-  if ((to.name == 'Login') || (to.name == 'home')) {
+  if ((to.name == 'Register') || (to.name == 'Login')){
     next()
     return
   }

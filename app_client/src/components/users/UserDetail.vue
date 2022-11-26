@@ -12,13 +12,13 @@ const props = defineProps({
   errors: {
     type: Object,
     required: false
-  },
+  }/*,
   uploadFile() {
     var files = this.$refs.photo.files;
     var data = new FormData();
    // data.append('logo', files[0]);
    console.log(data);
-}
+}*/
 })
 
 const emit = defineEmits(["save", "cancel"]);

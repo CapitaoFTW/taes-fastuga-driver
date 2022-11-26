@@ -4,21 +4,19 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\UserController;
 use App\Http\Controllers\api\AuthController;
 
-Route::post('login', [AuthController::class, 'login']);
-Route::post('register', [AuthController::class, 'register']);
+Route::POST('login', [AuthController::class, 'login']);
+Route::POST('register', [AuthController::class, 'register']);
 
 Route::middleware('auth:api')->group(function () {
-    Route::post('logout', [AuthController::class, 'logout']);
-    Route::get('users/me', [UserController::class, 'show_me']);
+    Route::POST('logout', [AuthController::class, 'logout']);
+    Route::GET('users/me', [UserController::class, 'show_me']);
 
-    Route::get('users', [UserController::class, 'index']);
-    Route::get('users/{user}', [UserController::class, 'show'])
+    Route::GET('users', [UserController::class, 'index']);
+    Route::POST('users', [UserController::class, 'create']);
+    Route::GET('users/{user}', [UserController::class, 'show'])
         ->middleware('can:view,user');
-    Route::put('users/{user}', [UserController::class, 'update'])
+    Route::PUT('users/{user}', [UserController::class, 'update'])
         ->middleware('can:update,user');
-    Route::patch('users/{user}/password', [UserController::class, 'update_password'])
+    Route::PATCH('users/{user}/password', [UserController::class, 'update_password'])
         ->middleware('can:updatePassword,user');
-
-    
 });
-

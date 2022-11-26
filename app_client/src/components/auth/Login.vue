@@ -25,16 +25,16 @@ const login = async () => {
   } else {
     credentials.value.password = ''
 
-    toast.error('User credentials are invalid!')
+    toast.error('Invalid access data. Please try again!')
   }
 }
 </script>
 
 <template>
-  <form class="row g-3 needs-validation" novalidate @submit.prevent="login">
-    <h3 class="mt-5">Login</h3>
+  <form class="row pt-4 needs-validation" novalidate @submit.prevent="login">
+    <h3 class="mb-3">Login</h3>
     <hr>
-    <div class="w-50">
+    <div class="">
       <div class="mb-3">
         <label for="inputUsername" class="form-label">Username</label>
         <input type="text" class="form-control" id="inputUsername" required v-model="credentials.username">

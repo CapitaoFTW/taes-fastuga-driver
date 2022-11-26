@@ -5,30 +5,27 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Models\User;
+use App\Http\Requests\CreateUserRequest;
+use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Hash;
 
 const PASSPORT_SERVER_URL = "http://server_api.test";
 const CLIENT_ID = 2;
-const CLIENT_SECRET = 'PFO5Cy929x7KdpOahQvsxE6wSjETYVmvfVSfHlvN';
+const CLIENT_SECRET = 'b5vKFWrNoZ5ggdGIB87tuBs2yAIhjbQsDNQJ3Eo4';
 
 class AuthController extends Controller
 {
-    private function passportAuthenticationData($username, $password) {
-       return [
-           'grant_type' => 'password',
-           'client_id' => CLIENT_ID,
-           'client_secret' => CLIENT_SECRET,
-           'username' => $username,
-           'password' => $password,
-           'scope' => ''
-       ];
-    }
-    public function validator(array $data)
+    private function passportAuthenticationData($username, $password)
     {
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+        return [
+            'grant_type' => 'password',
+            'client_id' => CLIENT_ID,
+            'client_secret' => CLIENT_SECRET,
+            'username' => $username,
+            'password' => $password,
+            'scope' => ''
+        ];
     }
 
     public function login(Request $request)
@@ -40,8 +37,7 @@ class AuthController extends Controller
             $errorCode = $response->getStatusCode();
             $auth_server_response = json_decode((string) $response->content(), true);
             return response()->json($auth_server_response, $errorCode);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json('Authentication has failed!', 401);
         }
     }
@@ -55,20 +51,19 @@ class AuthController extends Controller
         return response(['msg' => 'Token revoked'], 200);
     }
 
-    public function register(Request $request)
+    public function register(CreateUserRequest $request)
     {
-        $this->validator($request->all())->validate();
+        $validated = $request->validated();
 
-        event(new Registered($user = $this->create($request->all())));
+        User::create([
+            'name' => $validated['name'],
+            'email' => $validated['username'],
+            'password' => Hash::make($validated['password']),
+            'license_plate' => $validated['license_plate'],
+            'phone_number' => $validated['phone_number'],
+            'type' => 'D',
+        ]);
 
-        $this->guard()->login($user);
-
-        if ($response = $this->registered($request, $user)) {
-            return $response;
-        }
-
-        return $request->wantsJson()
-            ? new Response('', 201)
-            : redirect($this->redirectPath());
+        return $this->login($request);
     }
 }

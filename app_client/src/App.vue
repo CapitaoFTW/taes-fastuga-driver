@@ -45,10 +45,11 @@ const clickMenuOption = () => {
       <div class="collapse navbar-collapse justify-content-end">
         <ul class="navbar-nav">
           <li class="nav-item" v-show="!userStore.user">
-            <a class="nav-link" href="#">
-              <i class="bi bi-person-check-fill"></i>
+            <router-link class="nav-link" :class="{ active: $route.name === 'Register' }" :to="{ name: 'Register' }"
+              @click="clickMenuOption">
+              <i class="bi bi-box-arrow-in-right"></i>
               Register
-            </a>
+            </router-link>
           </li>
           <li class="nav-item" v-show="!userStore.user">
             <router-link class="nav-link" :class="{ active: $route.name === 'Login' }" :to="{ name: 'Login' }"
@@ -113,7 +114,7 @@ const clickMenuOption = () => {
             <ul class="nav flex-column mb-2">
               <li class="nav-item" v-show="!userStore.user">
                 <router-link class="nav-link" :class="{ active: $route.name === 'Register' }" :to="{ name: 'Register' }"
-              @click="clickMenuOption">
+                  @click="clickMenuOption">
                   <i class="bi bi-person-check-fill"></i>
                   Register
                 </router-link>
