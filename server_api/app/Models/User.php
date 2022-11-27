@@ -50,4 +50,9 @@ class User extends Authenticatable
     {
         return $this->gender == 'M' ? 'Masculine' : 'Feminine';
     }
+
+    public function projects()
+    {
+        return $this->hasMany(Order::class, 'delivered_by');
+    }
 }

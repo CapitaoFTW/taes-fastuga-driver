@@ -7,6 +7,7 @@ use App\Http\Controllers\api\AuthController;
 Route::POST('login', [AuthController::class, 'login']);
 Route::POST('register', [AuthController::class, 'register']);
 
+
 Route::middleware('auth:api')->group(function () {
     Route::POST('logout', [AuthController::class, 'logout']);
     Route::GET('users/me', [UserController::class, 'show_me']);
@@ -19,4 +20,9 @@ Route::middleware('auth:api')->group(function () {
         ->middleware('can:update,user');
     Route::PATCH('users/{user}/password', [UserController::class, 'update_password'])
         ->middleware('can:updatePassword,user');
+
+    Route::GET('orders', [OrderController::class, 'index']);
+    Route::GET('orders/{order}', [OrderController::class, 'show']);
+    Route::GET('users/{user}/orders', [OrderController::class, 'getOrdersOfUser']);
+
 });
