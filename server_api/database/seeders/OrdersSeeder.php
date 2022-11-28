@@ -14,8 +14,10 @@ class OrdersSeeder extends Seeder
     private $avgOrdersDay = [260, 50, 65, 65, 120, 170, 200]; // Domingo, Segunda, terça, ...
     private $customerIDs = [];
     private $customerDetails = [];
+    private $driverDetails = [];
     private $chefIDs = [];
     private $deliveryIDs = [];
+    private $driverIDs = [];
     private $productIDs = [];
     private $productPrices = [];
     private $paymentTypes = ['VISA', 'PAYPAL', 'MBWAY'];
@@ -50,6 +52,11 @@ class OrdersSeeder extends Seeder
         $arrayCustomers = DB::select('select id, user_id, default_payment_type, default_payment_reference from customers');
         $this->customerIDs = Arr::pluck($arrayCustomers, 'id');
         $this->customerDetails = Arr::keyBy($arrayCustomers, 'id');
+
+        $this->command->info("Preparing Drivers");
+        $arrayDrivers = DB::select('select user_id, nif from drivers');
+        $this->driverIDs = Arr::pluck($arrayDrivers, 'user_id');
+        $this->driversDetails = Arr::keyBy($arrayDrivers, 'user_id');
 
         $faker = \Faker\Factory::create('pt_PT');
 
@@ -125,7 +132,7 @@ class OrdersSeeder extends Seeder
             'points_gained' => 0,
             'points_used_to_pay' => 0,
             'date' =>  $day->format('Y-m-d'),
-            'delivered_by' => Arr::random($this->deliveryIDs),
+            'delivered_by' => Arr::random($this->driverIDs),
             'created_at' => $inicio,
             'updated_at' => $fim
         ];

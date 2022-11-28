@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateUserRequest extends FormRequest
 {
@@ -27,7 +28,7 @@ class UpdateUserRequest extends FormRequest
             'name' => 'required|string|max:255',
             'type' => 'required|in:C,EC,EM,ED',
             'photo_file' => 'nullable|file|image',
-            'license_plate' => ['required', 'string', 'regex:/[A-z]{2}-[0-9]{2}-[A-z]{2}|[0-9]{2}-[A-z]{2}-[0-9]{2}|[0-9]{2}-[0-9]{2}-[A-z]{2}|[A-z]{2}-[0-9]{2}-[0-9]{2}|[A-z]{2}[0-9]{2}[A-z]{2}|[0-9]{2}[A-z]{2}[0-9]{2}|[0-9]{2}[0-9]{2}[A-z]{2}|[A-z]{2}[0-9]{2}[0-9]{2}/'],
+            'license_plate' => ['required', 'string', Rule::unique('drivers', 'license_plate')->ignore($this->id), 'regex:/[A-z]{2}-[0-9]{2}-[A-z]{2}|[0-9]{2}-[A-z]{2}-[0-9]{2}|[0-9]{2}-[0-9]{2}-[A-z]{2}|[A-z]{2}-[0-9]{2}-[0-9]{2}|[A-z]{2}[0-9]{2}[A-z]{2}|[0-9]{2}[A-z]{2}[0-9]{2}|[0-9]{2}[0-9]{2}[A-z]{2}|[A-z]{2}[0-9]{2}[0-9]{2}/'],
             'phone_number' => ['required', 'max:9', 'regex:/[9][0-9]{8}|[2][0-9]{8}/'],
         ];
     }

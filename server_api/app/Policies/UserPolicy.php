@@ -21,11 +21,11 @@ class UserPolicy
 
     public function view(User $user, User $model)
     {
-        return /*$user->type == "A" ||*/ $user->id == $model->id;
+        return $user->type == "D" || $user->id == $model->id;
     }
     public function update(User $user, User $model)
     {
-        return /*$user->type == "A" ||*/ $user->id == $model->id;
+        return $user->type == "D" || $user->id == $model->id;
     }
     public function updatePassword(User $user, User $model)
     {

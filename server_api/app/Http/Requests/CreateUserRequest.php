@@ -29,7 +29,7 @@ class CreateUserRequest extends FormRequest
             'username' => ['required', 'email', Rule::unique('users', 'email')->ignore($this->id),],
             'password' => ['required', 'min:3', 'confirmed'],
             'password_confirmation' =>  ['required', 'same:password'],
-            'license_plate' => ['required', 'regex:/(^[A-Za-z]{2}-[0-9]{2}-[A-Za-z]{2}$)|^([0-9]{2}-[A-Za-z]{2}-[0-9]{2}$)|(^[0-9]{2}-[0-9]{2}-[A-Za-z]{2}$)|(^[A-Za-z]{2}-[0-9]{2}-[0-9]{2}$)|(^[A-Za-z]{2}[0-9]{2}[A-Za-z]{2}$)|(^[0-9]{2}[A-Za-z]{2}[0-9]{2}$)|(^[0-9]{2}[0-9]{2}[A-Za-z]{2}$)|(^[A-Za-z]{2}[0-9]{2}[0-9]{2}$)/'],
+            'license_plate' => ['required', Rule::unique('drivers', 'license_plate')->ignore($this->id), 'regex:/(^[A-Za-z]{2}-[0-9]{2}-[A-Za-z]{2}$)|^([0-9]{2}-[A-Za-z]{2}-[0-9]{2}$)|(^[0-9]{2}-[0-9]{2}-[A-Za-z]{2}$)|(^[A-Za-z]{2}-[0-9]{2}-[0-9]{2}$)|(^[A-Za-z]{2}[0-9]{2}[A-Za-z]{2}$)|(^[0-9]{2}[A-Za-z]{2}[0-9]{2}$)|(^[0-9]{2}[0-9]{2}[A-Za-z]{2}$)|(^[A-Za-z]{2}[0-9]{2}[0-9]{2}$)/'],
             'phone_number' => ['required', 'max:9', 'regex:/[9][0-9]{8}|[2][0-9]{8}/'],
         ];
     }

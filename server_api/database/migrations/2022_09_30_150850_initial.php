@@ -15,11 +15,9 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->enum('type', ['C', 'EC', 'ED', 'EM', 'D']);
-            // C "Customer"; EC "Employee - Chef"; ED "Employee - Delivery"; EM "Employee - Manager";
+            // C "Customer"; EC "Employee - Chef"; ED "Employee - Delivery"; EM "Employee - Manager"; D "Driver"
             $table->boolean('blocked')->default(false);
             $table->string('photo_url')->nullable();
-            $table->string('license_plate');
-            $table->string('phone_number', 20);
 
             $table->json('custom')->nullable();
             $table->softDeletes();
@@ -34,6 +32,19 @@ return new class extends Migration
             $table->string('nif', 9)->nullable();
             $table->enum('default_payment_type', ['VISA', 'PAYPAL', 'MBWAY'])->nullable();
             $table->string('default_payment_reference')->nullable();
+
+            $table->json('custom')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
+        Schema::create('drivers', function (Blueprint $table) {
+            $table->id();
+            $table->bigInteger('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->string('phone_number', 20);
+            $table->string('license_plate');
+            $table->string('nif', 9)->nullable();
 
             $table->json('custom')->nullable();
             $table->timestamps();
@@ -114,6 +125,7 @@ return new class extends Migration
         Schema::dropIfExists('orders');
         Schema::dropIfExists('products');
         Schema::dropIfExists('customers');
+        Schema::dropIfExists('drivers');
         Schema::table('users', function ($table) {
             $table->dropColumn(['type', 'blocked', 'photo_url', 'custom']);
         });

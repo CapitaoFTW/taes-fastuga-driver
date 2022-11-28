@@ -12,11 +12,11 @@ use App\Http\Requests\UpdateUserPasswordRequest;
 
 class UserController extends Controller
 {
-    public function create(CreateUserRequest $request, User $user)
+    /*public function create(CreateUserRequest $request, User $user)
     {
         $user->create($request->validated());
         return new UserResource($user);
-    }
+    }*/
 
     public function index()
     {

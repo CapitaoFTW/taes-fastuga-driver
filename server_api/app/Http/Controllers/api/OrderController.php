@@ -4,6 +4,9 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Order;
+use App\Http\Resources\OrderResource;
 
 class OrderController extends Controller
 {
@@ -13,15 +16,13 @@ class OrderController extends Controller
         return OrderResource::collection($orders);
     }
 
-    public function show(Request $request, $id)
+    public function show(Order $order)
     {
-        $order = Order::find($id);
         return new OrderResource($order);
     }
 
     public function getOrdersOfUser(User $user)
     {
         return OrderResource::collection($user->orders);
- 
     }
 }

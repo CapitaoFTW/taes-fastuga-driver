@@ -20,11 +20,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        //'gender',
         'photo_url',
         'type',
-        'license_plate',
-        'phone_number',
     ];
 
     /**
@@ -46,13 +43,16 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function getGenderNameAttribute()
-    {
-        return $this->gender == 'M' ? 'Masculine' : 'Feminine';
-    }
-
-    public function projects()
+    public function orders()
     {
         return $this->hasMany(Order::class, 'delivered_by');
+    }
+
+    public function driver() {
+        return $this -> hasOne(Driver:: class, 'user_id', 'id');
+    }
+
+    public function customer() {
+        return $this -> hasOne(Customer:: class, 'user_id', 'id');
     }
 }

@@ -7,6 +7,7 @@ import Dashboard from "../components/Dashboard.vue"
 import Login from "../components/auth/Login.vue"
 import Register from "../components/auth/Register.vue"
 import ChangePassword from "../components/auth/ChangePassword.vue"
+import Orders from "../components/orders/Orders.vue"
 import Users from "../components/users/Users.vue"
 import User from "../components/users/User.vue"
 import RouteRedirector from "../components/global/RouteRedirector.vue"
@@ -45,6 +46,23 @@ const router = createRouter({
       name: 'Dashboard',
       component: Dashboard
     },
+    {
+      path: '/orders',
+      name: 'Orders',
+      component: Orders,
+    },
+    /*{
+      path: '/orders/new',
+      name: 'NewOrder',
+      component: Order,
+      props: { id: -1 }
+    },
+    {
+      path: '/orders/:id',
+      name: 'Order',
+      component: Order,
+      props: route => ({ id: parseInt(route.params.id) })     
+    },*/
     {
       path: '/users',
       name: 'Users',
@@ -100,14 +118,14 @@ router.beforeEach((to, from, next) => {
   }
 
   if (to.name == 'Reports') {
-    if (userStore.user.type != 'A') {
+    if (userStore.user.type != 'D') {
       next({ name: 'home' })
       return
     }
   }
 
   if (to.name == 'User') {
-    if ((userStore.user.type == 'A') || (userStore.user.id == to.params.id)) {
+    if ((userStore.user.type == 'D') || (userStore.user.id == to.params.id)) {
       next()
       return
     }

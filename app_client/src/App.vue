@@ -106,7 +106,38 @@ const clickMenuOption = () => {
                 Dashboard
               </router-link>
             </li>
+            <li class="nav-item">
+              <router-link class="nav-link" :class="{ active: $route.name === 'Orders' }" :to="{ name: 'Orders' }"
+                @click="clickMenuOption">
+                <i class="bi bi-receipt-cutoff"></i>
+                Orders
+              </router-link>
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link" :class="{ active: $route.name === 'Users' }" :to="{ name: 'Users' }"
+                @click="clickMenuOption">
+                <i class="bi bi-people"></i>
+                Drivers
+              </router-link>
+            </li>
           </ul>
+          <!--<li class="nav-item" v-show="userStore.user?.type == 'D'">
+              <router-link class="nav-link" :class="{ active: $route.name === 'Reports' }" :to="{ name: 'Reports' }"
+                @click="clickMenuOption">
+                <i class="bi bi-bar-chart-line"></i>
+                Reports
+              </router-link>
+            </li>
+          </ul>
+          <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted"
+            v-if="userStore.user">
+            <span>My Orders</span>
+            <router-link class="link-secondary" :to="{ name: 'NewOrder' }" aria-label="Add a new order"
+              @click="clickMenuOption">
+              <i class="bi bi-xs bi-plus-circle"></i>
+            </router-link>
+          </h6>-->
+
           <div class="d-block d-md-none">
             <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
               <span>User</span>

@@ -6,13 +6,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
+use App\Models\Driver;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
 
 const PASSPORT_SERVER_URL = "http://server_api.test";
 const CLIENT_ID = 2;
-const CLIENT_SECRET = '3PB2rnsUbd8s1GuCaYeGtLjfwwkRC6a4nDD7GPlY';
+const CLIENT_SECRET = 'arrozdoce2420';
 
 class AuthController extends Controller
 {
@@ -55,14 +56,20 @@ class AuthController extends Controller
     {
         $validated = $request->validated();
 
-        User::create([
+        $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['username'],
             'password' => Hash::make($validated['password']),
-            'license_plate' => $validated['license_plate'],
-            'phone_number' => $validated['phone_number'],
             'type' => 'D',
         ]);
+
+        $driver = new Driver;
+
+        $driver->user_id = $user->id;
+        $driver->license_plate = $validated['license_plate'];
+        $driver->phone_number = $validated['phone_number'];
+
+        $driver->save();
 
         return $this->login($request);
     }

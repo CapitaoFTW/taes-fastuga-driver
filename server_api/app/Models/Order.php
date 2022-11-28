@@ -5,16 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Project extends Model
+class Order extends Model
 {
     use HasFactory;
-
-    public $timestamps = false;
 
     protected $fillable = [
             'ticket_number',
             'status' ,
             'total_price',
+            'delivered_by',
     ];
 
     public function getStatusNameAttribute()
@@ -23,7 +22,7 @@ class Project extends Model
             case 'P':
                 return 'Preparing';
             case 'C':
-                return 'Canceled';
+                return 'Cancelled';
             case 'R':
                 return 'Ready';
             case 'D':
@@ -31,10 +30,8 @@ class Project extends Model
         }
     }
 
-    
-
-    public function delivered_by()
+    public function user()
     {
-        return $this->belongsTo(User::class, 'delivered_by');
+        return $this->belongsTo(User::class,  'delivered_by', 'id');
     }
 }

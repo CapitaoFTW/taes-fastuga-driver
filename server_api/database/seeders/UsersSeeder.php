@@ -11,17 +11,17 @@ use Illuminate\Support\Facades\Storage;
 class UsersSeeder extends Seeder
 {
     private $photoPath = 'public/fotos';
-    private $typesOfUsersDesc = ['Manager', 'Chef', 'Delivery', 'Customer'];
-    private $typesOfUsers = ['EM', 'EC', 'ED', 'C'];
+    private $typesOfUsersDesc = ['Manager', 'Chef', 'Delivery', 'Customer', 'Driver'];
+    private $typesOfUsers = ['EM', 'EC', 'ED', 'C', 'D'];
 
     // TESTING SEEDER
     //    private $numberOfUsers =            [4,    10,    10,   20];
     //    private $numberOfFixedUsers =       [2,    3,     3,    5];
     //    private $numberOfSoftDeletedUsers = [1,    4,     4,    4];
 
-    private $numberOfUsers =            [4,    10,    10,   200];
-    private $numberOfFixedUsers =       [2,    3,     3,    10];
-    private $numberOfSoftDeletedUsers = [1,    4,     4,    40];
+    private $numberOfUsers =            [4,    10,    10,   200,    10];
+    private $numberOfFixedUsers =       [2,    3,     3,    10,     3];
+    private $numberOfSoftDeletedUsers = [1,    4,     4,    40,     4];
     private $paymentTypes = ['VISA', 'PAYPAL', 'MBWAY'];
     private $files_M = [];
     private $files_F = [];
@@ -31,8 +31,8 @@ class UsersSeeder extends Seeder
     public function run()
     {
         if (DatabaseSeeder::$seedType == "full") {
-            $this->numberOfUsers[3] = 3000;
-            $this->numberOfSoftDeletedUsers[3] = 150;
+            $this->numberOfUsers[4] = 3000;
+            $this->numberOfSoftDeletedUsers[4] = 150;
         }
         $this->command->table(['Users table seeder notice'], [
             ['Photos will be stored on path ' . storage_path('app/' . $this->photoPath)]
@@ -117,6 +117,10 @@ class UsersSeeder extends Seeder
                     $fullname = "Customer " . $userByNumber;
                     $email = 'customer_' . $userByNumber . '@mail.pt';
                     break;
+                case 'D':
+                    $fullname = "Driver " . $userByNumber;
+                    $email = 'driver_' . $userByNumber . '@mail.pt';
+                    break;
             }
         } else {
             static::randomName($faker, $gender, $fullname, $email);
@@ -139,8 +143,6 @@ class UsersSeeder extends Seeder
             'blocked' => false,
             'photo_url' => null,
             'gender' => $gender,
-            'phone_number' => $faker->phoneNumber,
-            'license_plate' => strtoupper($faker->unique()->bothify('??-##-??')),
         ];
     }
 
@@ -170,6 +172,19 @@ class UsersSeeder extends Seeder
                 'points' => rand(0, 125),
                 'default_payment_type' => $paymentType,
                 'default_payment_reference' => $paymentRef,
+                'created_at' => $user['created_at'],
+                'updated_at' => $user['updated_at'],
+                'deleted_at' => $user['deleted_at'],
+            ]);
+        }
+
+        if ($user['type'] == 'D') {
+
+            DB::table('drivers')->insert([
+                'user_id' => $newId,
+                'phone_number' => $faker->phoneNumber,
+                'license_plate' => strtoupper($faker->unique()->bothify('??-##-??')),
+                'nif' => $faker->randomNumber($nbDigits = 9, $strict = true),
                 'created_at' => $user['created_at'],
                 'updated_at' => $user['updated_at'],
                 'deleted_at' => $user['deleted_at'],
