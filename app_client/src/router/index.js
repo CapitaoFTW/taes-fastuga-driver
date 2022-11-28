@@ -8,6 +8,7 @@ import Login from "../components/auth/Login.vue"
 import Register from "../components/auth/Register.vue"
 import ChangePassword from "../components/auth/ChangePassword.vue"
 import Orders from "../components/orders/Orders.vue"
+import Order from "../components/orders/Order.vue"
 import Users from "../components/users/Users.vue"
 import User from "../components/users/User.vue"
 import RouteRedirector from "../components/global/RouteRedirector.vue"
@@ -51,7 +52,7 @@ const router = createRouter({
       name: 'Orders',
       component: Orders,
     },
-    /*{
+    {
       path: '/orders/new',
       name: 'NewOrder',
       component: Order,
@@ -62,7 +63,7 @@ const router = createRouter({
       name: 'Order',
       component: Order,
       props: route => ({ id: parseInt(route.params.id) })     
-    },*/
+    },
     {
       path: '/users',
       name: 'Users',

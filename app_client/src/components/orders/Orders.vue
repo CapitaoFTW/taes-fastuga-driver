@@ -7,7 +7,6 @@ const router = useRouter()
 
 const axios = inject("axios")
 const toast = inject("toast")
-//const ordersStore = useOrdersStore()
 
 const orders = ref([])
 const OrderToDelete = ref(null)
@@ -21,6 +20,7 @@ const loadOrders = () => {
     .then((response) => {
       orders.value = response.data.data
     })
+
     .catch((error) => {
       console.log(error)
     })
@@ -31,6 +31,7 @@ const loadUsers = () => {
     .then((response) => {
       users.value = response.data.data
     })
+    
     .catch((error) => {
       console.log(error)
     })
@@ -91,7 +92,7 @@ onMounted(() => {
       <h3 class="mt-4">Orders</h3>
     </div>
     <div class="mx-2 total-filtro">
-      <h5 class="mt-4">Total: {{ totalOrders }}</h5>
+      <h5 class="mt-4">Total: {{ totalOrders }} orders</h5>
     </div>
   </div>
   <hr>
@@ -99,11 +100,11 @@ onMounted(() => {
     <div class="mx-2 mt-2 flex-grow-1 filter-div">
       <label for="selectStatus" class="form-label">Filter by status:</label>
       <select class="form-select" id="selectStatus" v-model="filterByStatus">
-        <option :value="null">Choose an option</option>
+        <option :value="null" disabled>Choose an option</option>
         <option value="P">Preparing</option>
         <option value="R">Ready</option>
-        <!--<option value="C">Cancelled</option>
-        <option value="D">Delivered</option>-->
+        <option value="C">Cancelled</option>
+        <option value="D">Delivered</option>
       </select>
     </div>
     <div class="mx-2 mt-2 flex-grow-1 filter-div">

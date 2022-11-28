@@ -120,8 +120,7 @@ const clickMenuOption = () => {
                 Drivers
               </router-link>
             </li>
-          </ul>
-          <!--<li class="nav-item" v-show="userStore.user?.type == 'D'">
+            <li class="nav-item" v-show="userStore.user?.type == 'D'">
               <router-link class="nav-link" :class="{ active: $route.name === 'Reports' }" :to="{ name: 'Reports' }"
                 @click="clickMenuOption">
                 <i class="bi bi-bar-chart-line"></i>
@@ -136,7 +135,7 @@ const clickMenuOption = () => {
               @click="clickMenuOption">
               <i class="bi bi-xs bi-plus-circle"></i>
             </router-link>
-          </h6>-->
+          </h6>
 
           <div class="d-block d-md-none">
             <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">

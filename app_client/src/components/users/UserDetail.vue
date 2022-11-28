@@ -55,7 +55,7 @@ const cancel = () => {
     <hr>
     <div class="w-50">
       <div class="text-center pt-3">
-        <img :src="photoFullUrl" class="img-fluid rounded-circle" />
+        <img :src="photoFullUrl" class="img-fluid rounded-circle w-50" />
         <br />
         <input ref="photo" type="file" name="photo" id="photo" class="inputPhoto text-primary" @change="uploadFile" />
         <label class="text-primary" for="photo">Alterar Foto</label>
@@ -83,21 +83,6 @@ const cancel = () => {
         <input type="text" class="form-control" id="inputPhone" placeholder="Phone Number"
           v-model="editingUser.phone_number" />
         <field-error-message :errors="errors" fieldName="phone_number"></field-error-message>
-      </div>
-      <div class="d-flex ms-1 mt-4 justify-content-around">
-        <!--<div class="d-flex mb-3 ms-xs-3 flex-grow-1">
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="radioGender" value="M" required
-              v-model="editingUser.gender" id="inputGenderM" />
-            <label class="form-check-label" for="inputGenderM">Masculino</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="radioGender" value="F" v-model="editingUser.gender"
-              id="inputGenderF" />
-            <label class="form-check-label" for="inputGenderF">Feminino</label>
-          </div>
-          <field-error-message :errors="errors" fieldName="gender"></field-error-message>
-        </div>-->
       </div>
     </div>
     <div class="mt-3 mb-5 d-flex justify-content-center">
