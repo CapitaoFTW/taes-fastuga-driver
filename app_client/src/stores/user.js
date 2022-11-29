@@ -58,12 +58,12 @@ export const useUserStore = defineStore('user', () => {
             sessionStorage.setItem('token', response.data.access_token)
             await loadUser()
             await loadInProgressOrders()
-            return true       
+            return false
         } 
         catch(error) {
             clearUser()
             clearInProgressOrders()
-            return false
+            return error
         }
     }
 
@@ -74,12 +74,12 @@ export const useUserStore = defineStore('user', () => {
             sessionStorage.setItem('token', response.data.access_token)
             await loadUser()
             await loadInProgressOrders()
-            return true
+            return false
         } 
         catch(error) {
             clearUser()
             clearInProgressOrders()
-            return false
+            return error
         }
     }
     

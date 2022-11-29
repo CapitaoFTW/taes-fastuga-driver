@@ -18,17 +18,17 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomeView
+      name: 'Dashboard',
+      component: Dashboard
     },
     {
       path: '/redirect/:redirectTo',
       name: 'Redirect',
       component: RouteRedirector,
-      props: route => ({ redirectTo: route.params.redirectTo})   
+      props: route => ({ redirectTo: route.params.redirectTo })
     },
     {
-      path:'/register',
+      path: '/register',
       name: 'Register',
       component: Register
     },
@@ -41,11 +41,6 @@ const router = createRouter({
       path: '/password',
       name: 'ChangePassword',
       component: ChangePassword
-    },
-    {
-      path: '/dashboard',
-      name: 'Dashboard',
-      component: Dashboard
     },
     {
       path: '/orders',
@@ -62,7 +57,7 @@ const router = createRouter({
       path: '/orders/:id',
       name: 'Order',
       component: Order,
-      props: route => ({ id: parseInt(route.params.id) })     
+      props: route => ({ id: parseInt(route.params.id) })
     },
     {
       path: '/users',
@@ -95,11 +90,11 @@ const router = createRouter({
 
 let handlingFirstRoute = true
 
-router.beforeEach((to, from, next) => {  
+router.beforeEach((to, from, next) => {
   if (handlingFirstRoute) {
     handlingFirstRoute = false
 
-    next({name: 'Redirect', params: {redirectTo: to.fullPath}})
+    next({ name: 'Redirect', params: { redirectTo: to.fullPath } })
     return
 
   } else if (to.name == 'Redirect') {
@@ -107,8 +102,8 @@ router.beforeEach((to, from, next) => {
     return
   }
 
-  const userStore = useUserStore()  
-  if ((to.name == 'Register') || (to.name == 'Login')){
+  const userStore = useUserStore()
+  if ((to.name == 'Register') || (to.name == 'Login')) {
     next()
     return
   }
@@ -120,9 +115,15 @@ router.beforeEach((to, from, next) => {
 
   if (to.name == 'Reports') {
     if (userStore.user.type != 'D') {
-      next({ name: 'home' })
+      next({ name: 'Dashboard' })
       return
     }
+  }
+
+  if (to.name != 'Dashboard' && to.name != 'Register' && to.name != 'Login' && to.name != 'ChangePassword' && to.name != 'Orders' && to.name != 'NewOrder'
+  && to.name != 'Order' && to.name != 'Users' && to.name != 'User' && to.name != 'Reports' && to.name != 'about') {
+    next({ name: 'Dashboard' })
+    return
   }
 
   if (to.name == 'User') {
@@ -131,10 +132,10 @@ router.beforeEach((to, from, next) => {
       return
     }
 
-    next({ name: 'home' })
+    next({ name: 'Dashboard' })
     return
   }
-  
+
   next()
 })
 

@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch, inject } from 'vue'
-import UserDetail from "./UserDetail.vue"
 import { useRouter, onBeforeRouteLeave } from 'vue-router'
+import UserDetail from "./UserDetail.vue"
 
 const router = useRouter()
 const axios = inject('axios')
@@ -30,15 +30,18 @@ let originalValueStr = ''
 const loadUser = (id) => {
   originalValueStr = ''
   errors.value = null
+
   if (!id || (id < 0)) {
     user.value = newUser()
     originalValueStr = dataAsString()
+
   } else {
     axios.get('users/' + id)
       .then((response) => {
         user.value = response.data.data
         originalValueStr = dataAsString()
       })
+
       .catch((error) => {
         console.log(error)
       })
@@ -54,10 +57,12 @@ const save = () => {
       toast.success('User was updated successfully.')
       router.back()
     })
+
     .catch((error) => {
       if (error.response.status == 422) {
         toast.error('User was not updated due to validation errors!')
         errors.value = error.response.data.errors
+        
       } else {
         toast.error('User was not updated due to unknown server error!')
       }

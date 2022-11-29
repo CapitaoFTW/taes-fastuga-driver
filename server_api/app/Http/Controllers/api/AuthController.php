@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\Authenticate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use App\Models\Driver;
 use App\Http\Requests\CreateUserRequest;
-use App\Http\Resources\UserResource;
+use App\Http\Requests\AuthenticateUserRequest;
 use Illuminate\Support\Facades\Hash;
 
 const PASSPORT_SERVER_URL = "http://server_api.test";
@@ -27,6 +28,11 @@ class AuthController extends Controller
             'password' => $password,
             'scope' => ''
         ];
+    }
+
+    public function loginUser(AuthenticateUserRequest $request) {
+        $validated = $request->validated();
+        return $this->login($request);
     }
 
     public function login(Request $request)

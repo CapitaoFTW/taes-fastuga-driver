@@ -5,7 +5,7 @@ use App\Http\Controllers\api\UserController;
 use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\api\OrderController;
 
-Route::POST('login', [AuthController::class, 'login']);
+Route::POST('login', [AuthController::class, 'loginUser']);
 Route::POST('register', [AuthController::class, 'register']);
 Route::POST('orders', [OrderController::class, 'store']);
 

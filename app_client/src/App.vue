@@ -14,7 +14,7 @@ const logout = async () => {
     toast.success("User has logged out of the application.")
 
     clickMenuOption()
-    router.push({ name: 'home' })
+    router.push({ name: 'Dashboard' })
 
   } else {
     toast.error("There was a problem logging out of the application!")
@@ -31,7 +31,7 @@ const clickMenuOption = () => {
 <template>
   <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top flex-md-nowrap p-0">
     <div class="container-fluid">
-      <router-link class="navbar-brand col-md-3 col-lg-2 me-0 px-3 bg-transparent" :to="{ name: 'home' }"
+      <router-link class="navbar-brand col-md-3 col-lg-2 me-0 px-3 bg-transparent" :to="{ name: 'Dashboard' }"
         @click="clickMenuOption">
         <img src="@/assets/logoFasTuga.png" alt="" width="30" height="30" class="d-inline-block align-text-top" />
         &nbsp; FasTuga Driver
@@ -60,7 +60,7 @@ const clickMenuOption = () => {
           </li>
           <li class="nav-item dropdown" v-show="userStore.user">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-              data-bs-toggle="dropdown" aria-expanded="false">
+              data-bs-toggle="dropdown" aria-expanded="false">€ 0,00
               <img :src="userStore.userPhotoUrl" class="rounded-circle z-depth-0 avatar-img" alt="avatar image" />
               <span class="avatar-text">{{ userStore.user?.name ?? "Anonymous" }}</span>
             </a>
