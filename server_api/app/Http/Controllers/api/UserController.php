@@ -9,6 +9,8 @@ use App\Http\Resources\UserResource;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\UpdateUserPasswordRequest;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -34,10 +36,21 @@ class UserController extends Controller
         return new UserResource($user);
     }
 
-    public function update_password(UpdateUserPasswordRequest $request, User $user)
+    public function update_password(Request $request, User $user)
     {
-        $user->password = bcrypt($request->validated()['password']);
+        $request->validate([
+            'current_password' => ['required', function ($attribute, $value, $fail) use ($user) {
+                if (!Hash::check($value, $user->password)) {
+                    return $fail(__('The current password is incorrect.'));
+                }
+            }],
+            'password' => ['required', 'different:current_password'],
+            'password_confirmation' => ['same:password'],
+        ]);
+
+        $user->password = Hash::make($request->password);
         $user->save();
+
         return new UserResource($user);
     }
 

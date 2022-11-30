@@ -8,15 +8,15 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
-  showDriver: {
-    type: Boolean,
-    default: true,
-  },
-  showTicket: {
-    type: Boolean,
-    default: true,
-  },
   showPrice: {
+    type: Boolean,
+    default: true,
+  },
+  showStatus: {
+    type: Boolean,
+    default: true,
+  },
+  showShowButton: {
     type: Boolean,
     default: true,
   },
@@ -30,7 +30,11 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['edit', 'delete'])
+const emit = defineEmits(['show', 'edit', 'delete'])
+
+const showClick = (order) => {
+  emit('show', order)
+}
 
 const editClick = (order) => {
   emit('edit', order)
@@ -42,36 +46,24 @@ const deleteClick = (order) => {
 </script>
 
 <template>
-  <table class="table">
-    <thead>
-      <tr>
-        <th v-if="showTicket">Ticket</th>
-        <th>Status</th>
-        <th v-if="showDriver">Driver</th>
-        <th v-if="showPrice">Total Price</th>
-        <th v-if="showEditButton || showDeleteButton"></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="order in orders" :key="order.id">
-        <td v-if="showTicket">{{ order.ticket_number }}</td>
-        <td>{{ order.status_name }}</td>
-        <td v-if="showDriver">{{ order.driver }}</td>
-        <td v-if="showPrice">{{ order.total_price }} €</td>
-        <td class="text-end" v-if="showEditButton || showDeleteButton">
-          <div class="d-flex justify-content-end">
-            <button class="btn btn-xs btn-light" @click="editClick(order)" v-if="showEditButton"><i
-                class="bi bi-xs bi-pencil"></i>
-            </button>
-
-            <button class="btn btn-xs btn-light" @click="deleteClick(order)" v-if="showDeleteButton"><i
-                class="bi bi-xs bi-x-square-fill"></i>
-            </button>
+  <div class="mb-3 d-flex justify-content-start flex-wrap">
+    <div class="mx-2 mt-2">
+      <div class="row">
+        <div class="col-sm-4" v-for="order in orders" :key="order.id">
+          <div class="card mb-3">
+            <div class="card-body">
+              <h5 class="card-title">Order #{{ order.ticket_number }}</h5>
+              <p class="mb-5"></p>
+              <p class="card-text">Distance: 53.40 km</p>
+              <p class="mb-5"></p>
+              <p class="card-text justify-content-end"><a class="btn btn-xl btn-primary" @click="showClick(order)"
+                  v-if="showShowButton">Detalhes</a></p>
+            </div>
           </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped>

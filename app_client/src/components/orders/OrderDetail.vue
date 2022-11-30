@@ -48,56 +48,41 @@ const cancel = () => {
 
 </script>
 
+
+
 <template>
-  <form class="row needs-validation" novalidate @submit.prevent="save">
-    <h3 class="mt-4 mb-3">{{ orderTitle }}</h3>
-    <hr>
-
-    <div class="mb-3">
-      <label for="inputTicket" class="form-label">Order Ticket</label>
-      <input type="text" class="form-control" id="inputTicket" placeholder="Order Ticket" required
-        v-model="editingOrder.ticket_number">
-      <field-error-message :errors="errors" fieldName="name"></field-error-message>
-    </div>
-
-    <div class="d-flex flex-wrap justify-content-between">
-      <div class="mb-3 me-3 flex-grow-1">
-        <label for="inputDriver" class="form-label">Driver to Deliver</label>
-        <select class="form-select pe-2" id="inputDriver" v-model="editingOrder.user_name">
-          <option :value="null">-- No Driver --</option>
-          <option v-for="user in users" :key="user.id" :value="user.id">{{ user.name }}</option>
-        </select>
-        <field-error-message :errors="errors" fieldName="user_name"></field-error-message>
+  <div class="container">
+    <div class="row">
+      <h3 class="mt-4 mb-3">{{ orderTitle }}</h3>
+      <hr>
+      <div class="mb-3 d-flex justify-content-start flex-wrap">
+        <div class="mx-2 mt-2">
+          <div class="row">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title mt-2">Products</h5>
+                <p class="mb-5"></p>
+                <p class="d-flex justify-content-between"><span>Alface</span><span>Quantity: 1</span></p>
+                <p class="d-flex justify-content-between"><span>Espinafres</span><span>Quantity: 4</span></p>
+                <p class="d-flex justify-content-between"><span>Pão</span><span>Quantity: 6</span></p>
+                <p class="d-flex justify-content-between"><span>Coca-Cola</span><span>Quantity: 3</span></p>
+                <p class="d-flex justify-content-between"><span>Alface</span><span>Quantity: 5</span></p>
+                <span class="mx-5 px-5"><span class="mx-5 px-5"></span></span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-
-      <div class="mb-3 ms-xs-3 flex-grow-1">
-        <label for="inputOrder" class="form-label">Status</label>
-        <select class="form-select" id="inputOrder" v-model="editingOrder.status">
-          <option :value="null"></option>
-          <option value="P">Preparing</option>
-          <option value="R">Ready</option>
-          <option value="C">Cancelled</option>
-          <option value="D">Delivered</option>
-        </select>
-        <field-error-message :errors="errors" fieldName="status"></field-error-message>
-      </div>
-    </div>
-    <div class="d-flex flex-wrap justify-content-between">
-      <div class="row mb-3 total_price">
-        <label for="inputTotalPrice" class="col-sm-3 col-form-label">Total Price</label>
-        <div class="col-sm-9">
-          <input type="text" class="form-control" id="inputTotalPrice" v-model="editingOrder.total_price">
-          <field-error-message :errors="errors" fieldName="total_price"></field-error-message>
+      <div class="d-flex justify-content-between">
+        <router-link class="btn btn-primary" :class="{ active: $route.name === 'Orders' }" :to="{ name: 'Orders' }"
+          @click="clickMenuOption">
+          <i class="bi bi-backspace"></i>Back</router-link>
+        <div class="row mt-2">
+          Price: {{ editingOrder.total_price }} € <span class="mx-5 px-5"></span>
         </div>
       </div>
     </div>
-
-    <div class="mb-3 d-flex justify-content-end">
-      <button type="button" class="btn btn-primary px-5" @click="save">Save</button>
-      <button type="button" class="btn btn-light px-5" @click="cancel">Cancel</button>
-    </div>
-
-  </form>
+  </div>
 </template>
 
 <style scoped>

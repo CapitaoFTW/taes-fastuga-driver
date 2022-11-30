@@ -55,7 +55,7 @@ const cancel = () => {
     <hr>
     <div class="w-50">
       <div class="text-center pt-3">
-        <img :src="photoFullUrl" class="img-fluid rounded-circle w-50" />
+        <img :src="photoFullUrl" class="img-fluid rounded-circle"/>
         <br />
         <input ref="photo" type="file" name="photo" id="photo" class="inputPhoto text-primary" @change="uploadFile" />
         <label class="text-primary" for="photo">Alterar Foto</label>

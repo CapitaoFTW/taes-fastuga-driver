@@ -103,6 +103,11 @@ router.beforeEach((to, from, next) => {
   }
 
   const userStore = useUserStore()
+  if (userStore.user && (to.name == 'Register' || to.name == 'Login')) {
+    next({ name: 'Dashboard' })
+    return
+  }
+
   if ((to.name == 'Register') || (to.name == 'Login')) {
     next()
     return

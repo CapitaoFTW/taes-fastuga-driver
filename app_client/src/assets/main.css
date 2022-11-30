@@ -27,6 +27,10 @@ a,
     place-items: center;
   }
 
+  .img-fluid {
+    width: 111px;
+  }
+
   #app {
     display: grid;
     grid-template-columns: 1fr 1fr;

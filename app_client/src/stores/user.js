@@ -95,6 +95,16 @@ export const useUserStore = defineStore('user', () => {
         }
     }
 
+    async function changePassword (passwords) {
+        try {
+            const response = await axios.patch('users/' + userId.value + '/password', passwords)
+            return false
+        } 
+        catch(error) {
+            return error
+        }
+    }
+
     async function restoreToken () {
         let storedToken = sessionStorage.getItem('token')
         if (storedToken) {
@@ -107,5 +117,5 @@ export const useUserStore = defineStore('user', () => {
         return false
     }
     
-    return { user, inProgressOrders, userId, userPhotoUrl, login, register, logout, restoreToken }
+    return { user, inProgressOrders, userId, userPhotoUrl, login, register, changePassword, logout, restoreToken }
 })

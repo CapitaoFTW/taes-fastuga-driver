@@ -14,7 +14,7 @@ const logout = async () => {
     toast.success("User has logged out of the application.")
 
     clickMenuOption()
-    router.push({ name: 'Dashboard' })
+    router.push({ name: 'Login' })
 
   } else {
     toast.error("There was a problem logging out of the application!")
@@ -60,7 +60,7 @@ const clickMenuOption = () => {
           </li>
           <li class="nav-item dropdown" v-show="userStore.user">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-              data-bs-toggle="dropdown" aria-expanded="false">€ 0,00
+              data-bs-toggle="dropdown" aria-expanded="false">€ 17,39
               <img :src="userStore.userPhotoUrl" class="rounded-circle z-depth-0 avatar-img" alt="avatar image" />
               <span class="avatar-text">{{ userStore.user?.name ?? "Anonymous" }}</span>
             </a>
@@ -118,13 +118,6 @@ const clickMenuOption = () => {
                 @click="clickMenuOption">
                 <i class="bi bi-people"></i>
                 Drivers
-              </router-link>
-            </li>
-            <li class="nav-item" v-show="userStore.user?.type == 'D'">
-              <router-link class="nav-link" :class="{ active: $route.name === 'Reports' }" :to="{ name: 'Reports' }"
-                @click="clickMenuOption">
-                <i class="bi bi-bar-chart-line"></i>
-                Reports
               </router-link>
             </li>
           </ul>

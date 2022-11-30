@@ -16,7 +16,7 @@ const newOrder = () => {
     ticket_number: '',
     status: 'P',
     total_price: null,
-    delivered_by: userStore.userId,
+    delivered_by: userStore.userId
   }
 }
 
@@ -62,6 +62,7 @@ const save = () => {
           toast.error('Order was not created due to unknown server error!')
         }
       })
+
   } else {
     axios.put('orders/' + props.id, order.value)
       .then((response) => {
@@ -70,6 +71,7 @@ const save = () => {
         toast.success('Order #' + order.value.id + ' was updated successfully.')
         router.back()
       })
+
       .catch((error) => {
         if (error.response.status == 422) {
           toast.error('Order #' + props.id + ' was not updated due to validation errors!')
@@ -100,9 +102,11 @@ const leaveConfirmed = () => {
 onBeforeRouteLeave((to, from, next) => {
   nextCallBack = null
   let newValueStr = dataAsString()
+
   if (originalValueStr != newValueStr) {
     nextCallBack = next
     confirmationLeaveDialog.value.show()
+    
   } else {
     next()
   }
@@ -139,7 +143,7 @@ onMounted(() => {
     .then((response) => {
       users.value = response.data.data
     })
-    
+
     .catch((error) => {
       console.log(error)
     })
