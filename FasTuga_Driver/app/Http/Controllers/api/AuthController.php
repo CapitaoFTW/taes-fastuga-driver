@@ -12,7 +12,7 @@ use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\AuthenticateUserRequest;
 use Illuminate\Support\Facades\Hash;
 
-const PASSPORT_SERVER_URL = "http://server_api.test";
+const PASSPORT_SERVER_URL = "http://fastuga_driver.test";
 const CLIENT_ID = 2;
 const CLIENT_SECRET = 'arrozdoce2420';
 
