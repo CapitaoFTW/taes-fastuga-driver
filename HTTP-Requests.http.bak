@@ -17,9 +17,3 @@ POST: http://server_api.test/api/register
     "license_plate" : "53-HA-76",
     "phone_number" : "910599057"
 }
-
-{
-    "current_password": "123",
-    "password": "1234",
-    "password_confirmation": "1234"
-}

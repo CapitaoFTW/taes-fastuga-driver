@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, computed } from 'vue'
+import { ref, watch } from 'vue'
 
 const props = defineProps({
   order: {
@@ -12,7 +12,7 @@ const props = defineProps({
   },
   operationType: {
     type: String,
-    default: 'insert'  // insert / update
+    default: 'show'
   },
   users: {
     type: Array,
@@ -20,31 +20,24 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['save', 'cancel'])
-
-const editingOrder = ref(props.order)
+const order = ref(props.order)
 
 watch(
   () => props.order,
   (newOrder) => {
-    editingOrder.value = newOrder
+    order.value = newOrder
   }
 )
 
-const orderTitle = computed(() => {
-  if (!editingOrder.value) {
-    return ''
-  }
-  return props.operationType == 'insert' ? 'New Order' : 'Order #' + editingOrder.value.id
-})
+/*const emit = defineEmits(['save', 'cancel'])
 
 const save = () => {
-  emit('save', editingOrder.value)
+  emit('save', order.value)
 }
 
 const cancel = () => {
-  emit('cancel', editingOrder.value)
-}
+  emit('cancel', order.value)
+}*/
 
 </script>
 
@@ -53,32 +46,41 @@ const cancel = () => {
 <template>
   <div class="container">
     <div class="row">
-      <h3 class="mt-4 mb-3">{{ orderTitle }}</h3>
+      <h3 class="mt-4 mb-3">Order #{{ order.ticket_number }}</h3>
       <hr>
       <div class="mb-3 d-flex justify-content-start flex-wrap">
         <div class="mx-2 mt-2">
-          <div class="row">
+          <div class="row mb-2">
             <div class="card">
               <div class="card-body">
                 <h5 class="card-title mt-2">Products</h5>
                 <p class="mb-5"></p>
-                <p class="d-flex justify-content-between"><span>Alface</span><span>Quantity: 1</span></p>
-                <p class="d-flex justify-content-between"><span>Espinafres</span><span>Quantity: 4</span></p>
-                <p class="d-flex justify-content-between"><span>Pão</span><span>Quantity: 6</span></p>
-                <p class="d-flex justify-content-between"><span>Coca-Cola</span><span>Quantity: 3</span></p>
-                <p class="d-flex justify-content-between"><span>Alface</span><span>Quantity: 5</span></p>
-                <span class="mx-5 px-5"><span class="mx-5 px-5"></span></span>
+                <p class="d-flex justify-content-between"><span>Produto 1</span><span>Quantity: 1</span></p>
+                <p class="d-flex justify-content-between"><span>Produto 2</span><span>Quantity: 4</span></p>
+                <p class="d-flex justify-content-between"><span>Produto 3</span><span>Quantity: 6</span></p>
+                <p class="d-flex justify-content-between"><span>Produto 4</span><span>Quantity: 3</span></p>
+                <p class="d-flex justify-content-between"><span>Produto 5</span><span>Quantity: 5</span></p>
+                <span class="mx-5 px-5"><span class="mx-3 px-2"></span></span>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="d-flex justify-content-between">
-        <router-link class="btn btn-primary" :class="{ active: $route.name === 'Orders' }" :to="{ name: 'Orders' }"
-          @click="clickMenuOption">
-          <i class="bi bi-backspace"></i>Back</router-link>
-        <div class="row mt-2">
-          Price: {{ editingOrder.total_price }} € <span class="mx-5 px-5"></span>
+          <div class="row mb-2">
+            <div class="card">
+              <div class="card-body mt-2">
+                <h6 class="card-title text-center">YOU WILL EARN: 3,00 €</h6>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-8 p-0">
+              <router-link class="btn btn-primary" :class="{ active: $route.name === 'Orders' }"
+                :to="{ name: 'Orders' }" @click="clickMenuOption">
+                <i class="bi bi-backspace"></i>Back</router-link>
+            </div>
+            <div class="col-4 p-0 mt-2 align-right">
+              Price: {{ order.total_price }} €
+            </div>
+          </div>
         </div>
       </div>
     </div>

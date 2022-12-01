@@ -53,7 +53,7 @@ const cancel = () => {
   <form class="row pt-4 needs-validation justify-content-center" novalidate @submit.prevent="save">
     <h3 class="mb-3">Profile</h3>
     <hr>
-    <div class="w-50">
+    <div class="w-75">
       <div class="text-center pt-3">
         <img :src="photoFullUrl" class="img-fluid rounded-circle"/>
         <br />

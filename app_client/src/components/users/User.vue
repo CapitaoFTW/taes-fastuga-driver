@@ -23,6 +23,7 @@ const newUser = () => {
     photo_url: null,
     license_plate: '',
     phone_number: '',
+    balance: '',
   }
 }
 

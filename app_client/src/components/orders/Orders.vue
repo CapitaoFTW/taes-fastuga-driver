@@ -9,11 +9,8 @@ const axios = inject("axios")
 const toast = inject("toast")
 
 const orders = ref([])
-const OrderToDelete = ref(null)
 const users = ref([])
-const filterByDriver = ref(null)
-const filterByStatus = ref('C')
-const deleteConfirmationDialog = ref(null)
+const filterByStatus = ref('P')
 
 const loadOrders = () => {
   axios.get('orders')
@@ -34,37 +31,13 @@ const loadUsers = () => {
     
     .catch((error) => {
       console.log(error)
+ 
     })
-}
-
-const addOrder = () => {
-  router.push({ name: 'NewOrder' })
-}
-
-const editOrder = (order) => {
-  router.push({ name: 'Order', params: { id: order.id } })
 }
 
 const showOrder = (order) => {
   router.push({ name: 'Order', params: { id: order.id } })
 }
-
-/* Ainda não é para fazer
-const deleteOrderConfirmed = () => {
-  ordersStore.deleteOrder(orderToDelete.value)
-    .then((deletedOrder) => {
-      toast.info("Order " + orderToDeleteDescription.value + " was deleted")
-    })
-    .catch(() => {
-      toast.error("It was not possible to delete Order " + orderToDeleteDescription.value + "!")
-    })
-}*/
-
-/* Ainda não é para fazer
-const clickToDeleteOrder = (order) => {
-  orderToDelete.value = order
-  deleteConfirmationDialog.value.show()
-}*/
 
 const filteredOrders = computed(() => {
   return orders.value.filter(p => (!filterByStatus.value || filterByStatus.value == p.status))
@@ -73,13 +46,6 @@ const filteredOrders = computed(() => {
 const totalOrders = computed(() => {
   return orders.value.reduce((c, p) => (!filterByStatus.value || filterByStatus.value == p.status) ? c + 1 : c, 0)
 })
-
-/* Ainda não é para fazer
-const orderToDeleteDescription = computed(() => {
-  return orderToDelete.value
-    ? `#${orderToDelete.value.id} (${orderToDelete.value.name})`
-    : ""
-})*/
 
 onMounted(() => {
   loadUsers()
@@ -109,14 +75,11 @@ onMounted(() => {
         <option value="R">Ready</option>
         <option value="C">Cancelled</option>
         <option value="D">Delivered</option>
+        <option value="O">Ongoing</option>
       </select>
     </div>
-    <!--<div class="mx-2 mt-2">
-      <button type="button" class="btn btn-success px-4 btn-addprj" @click="addOrder"><i
-          class="bi bi-xs bi-plus-circle"></i>&nbsp; Add Order</button>
-    </div>-->
   </div>
-  <order-table :orders="filteredOrders" :showId="true" :showDates="true" @show="showOrder" @edit="editOrder" @delete="clickToDeleteOrder">
+  <order-table :orders="filteredOrders" :showId="true" :showDates="true" @show="showOrder">
   </order-table>
 </template>
 

@@ -20,28 +20,12 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
-  showEditButton: {
-    type: Boolean,
-    default: true,
-  },
-  showDeleteButton: {
-    type: Boolean,
-    default: true,
-  }
 })
 
-const emit = defineEmits(['show', 'edit', 'delete'])
+const emit = defineEmits(['show'])
 
 const showClick = (order) => {
   emit('show', order)
-}
-
-const editClick = (order) => {
-  emit('edit', order)
-}
-
-const deleteClick = (order) => {
-  emit('delete', order)
 }
 </script>
 

@@ -48,8 +48,9 @@ const register = async () => {
 
 <template>
   <form class="row pt-4 needs-validation justify-content-center" novalidate @submit.prevent="register">
-    <div class="w-50">
-      <h3 class="d-flex justify-content-center">Register</h3>
+    <h3 class="mb-3">Register</h3>
+    <hr>
+    <div class="w-75">
       <div class="mb-3">
         <label for="inputName" class="form-label">Name</label>
         <input type="text" class="form-control" id="inputName" required v-model="credentials.name">
@@ -81,7 +82,7 @@ const register = async () => {
         <input type="text" class="form-control" id="inputPhoneNumber" required v-model="credentials.phone_number">
         <field-error-message :errors="errors" fieldName="phone_number"></field-error-message>
       </div>
-      <div class="d-flex justify-content-center">
+      <div class="d-flex justify-content-center mb-4">
         <button type="button" class="btn btn-primary px-5" @click="register">Register</button>
       </div>
     </div>

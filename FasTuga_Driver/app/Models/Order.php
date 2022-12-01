@@ -10,10 +10,12 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = [
-            'ticket_number',
-            'status' ,
-            'total_price',
-            'delivered_by',
+        'ticket_number',
+        'status',
+        'total_price',
+        'street_address',
+        'quantity',
+        'delivered_by',
     ];
 
     public function getStatusNameAttribute()
@@ -27,6 +29,8 @@ class Order extends Model
                 return 'Ready';
             case 'D':
                 return 'Delivered';
+            case 'O':
+                return 'Ongoing';
         }
     }
 

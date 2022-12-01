@@ -24,29 +24,11 @@ class OrderController extends Controller
 
     public function getOrdersInProgressOfUser(User $user)
     {
-        return OrderResource::collection($user->orders()->where('status', 'in', 'P, R',)->get());
+        return OrderResource::collection($user->orders()->where('status', 'in', 'P, R')->get());
     }
 
     public function show(Order $order)
     {
-        return new OrderResource($order);
-    }
-
-    public function store(StoreUpdateOrderRequest $request)
-    {
-        $newOrder = Order::create($request->validated());
-        return new OrderResource($newOrder);
-    }
-
-    public function update(StoreUpdateOrderRequest $request, Order $order)
-    {
-        $order->update($request->validated());
-        return new OrderResource($order);
-    }
-
-    public function destroy(Order $order)
-    {
-        $order->delete();
         return new OrderResource($order);
     }
 }

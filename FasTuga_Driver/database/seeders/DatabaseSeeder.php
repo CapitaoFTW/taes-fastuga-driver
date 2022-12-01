@@ -25,20 +25,13 @@ class DatabaseSeeder extends Seeder
         DB::statement("SET foreign_key_checks=0");
 
         DB::table('users')->delete();
-        DB::table('customers')->delete();
-        DB::table('products')->delete();
-        DB::table('order_items')->delete();
         DB::table('orders')->delete();
 
         DB::statement('ALTER TABLE users AUTO_INCREMENT = 0');
-        DB::statement('ALTER TABLE products AUTO_INCREMENT = 0');
-        DB::statement('ALTER TABLE order_items AUTO_INCREMENT = 0');
         DB::statement('ALTER TABLE orders AUTO_INCREMENT = 0');
 
         DB::statement("SET foreign_key_checks=1");
 
-
-        $this->call(ProductsSeeder::class);
         $this->call(UsersSeeder::class);
         $this->call(OrdersSeeder::class);
 

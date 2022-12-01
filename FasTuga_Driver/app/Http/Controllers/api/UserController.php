@@ -56,6 +56,8 @@ class UserController extends Controller
 
     public function show_me(Request $request)
     {
-        return new UserResource($request->user());
+        $user = $request->user();
+        $user->name = explode(" ", $user->name)[0] . " " . explode(" ", $user->name)[substr_count($user->name, " ")];
+        return new UserResource($user);
     }
 }

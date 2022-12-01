@@ -11,18 +11,7 @@ use Illuminate\Support\Facades\Storage;
 class UsersSeeder extends Seeder
 {
     private $photoPath = 'public/fotos';
-    private $typesOfUsersDesc = ['Manager', 'Chef', 'Delivery', 'Customer', 'Driver'];
-    private $typesOfUsers = ['EM', 'EC', 'ED', 'C', 'D'];
-
-    // TESTING SEEDER
-    //    private $numberOfUsers =            [4,    10,    10,   20];
-    //    private $numberOfFixedUsers =       [2,    3,     3,    5];
-    //    private $numberOfSoftDeletedUsers = [1,    4,     4,    4];
-
-    private $numberOfUsers =            [4,    10,    10,   200,    10];
-    private $numberOfFixedUsers =       [2,    3,     3,    10,     3];
-    private $numberOfSoftDeletedUsers = [1,    4,     4,    40,     4];
-    private $paymentTypes = ['VISA', 'PAYPAL', 'MBWAY'];
+    private $numberOfUsers = 200;
     private $files_M = [];
     private $files_F = [];
     static public $allUsers = [];
@@ -31,8 +20,7 @@ class UsersSeeder extends Seeder
     public function run()
     {
         if (DatabaseSeeder::$seedType == "full") {
-            $this->numberOfUsers[4] = 3000;
-            $this->numberOfSoftDeletedUsers[4] = 150;
+            $this->numberOfUsers = 1500;
         }
         $this->command->table(['Users table seeder notice'], [
             ['Photos will be stored on path ' . storage_path('app/' . $this->photoPath)]
@@ -43,26 +31,14 @@ class UsersSeeder extends Seeder
 
         $faker = \Faker\Factory::create('pt_PT');
 
+        $totalUsersOfType = $this->numberOfUsers;
 
-        for ($typeIdx = 0; $typeIdx < count($this->typesOfUsers); $typeIdx++) {
-            $userType = $this->typesOfUsers[$typeIdx];
-            $totalUsersOfType = $this->numberOfUsers[$typeIdx];
-            $totalFixedUsersOfType = $this->numberOfFixedUsers[$typeIdx];
-            $totalSoftDeletes = $this->numberOfSoftDeletedUsers[$typeIdx];
-
-            for ($i = 1; $i <= $totalUsersOfType; $i++) {
-                $userNumber = $i <= $totalFixedUsersOfType ? $i : 0;
-                $userRow = $this->newFakerUser($faker, $userType, $userNumber);
-                $userInfo = $this->insertUser($faker, $userRow);
-                $this->command->info("Created User '{$this->typesOfUsersDesc[$typeIdx]}' - $i / $totalUsersOfType");
-                if ($userType <> 'C') {
-                    $this->updateFoto($userInfo);
-                }
-            }
-            $this->softdeletes($userType, $totalSoftDeletes);
-            $this->command->info("Soft deleted $totalSoftDeletes users of type '$userType'");
+        for ($i = 1; $i <= $totalUsersOfType; $i++) {
+            $userNumber = $i;
+            $userRow = $this->newFakerUser($faker, $userNumber);
+            $userInfo = $this->insertUser($faker, $userRow);
+            $this->updateFoto($userInfo);
         }
-        $this->updateRandomFotos();
     }
 
     private function limparFicheirosFotos()
@@ -83,48 +59,12 @@ class UsersSeeder extends Seeder
         }
     }
 
-    public static function getRandomPaymentReference($faker, $paymentType)
-    {
-        if ($paymentType == 'VISA') {
-            return '4' . $faker->randomNumber($nbDigits = 8, $strict = true) . $faker->randomNumber($nbDigits = 7, $strict = true);
-        } elseif ($paymentType == 'MBWAY') {
-            return '9' . $faker->randomNumber($nbDigits = 8, $strict = true);
-        } elseif ($paymentType == 'PAYPAL') {
-            return $faker->email();
-        }
-    }
-
-    private function newFakerUser($faker, $tipo = 'C', $userByNumber = 0)
+    private function newFakerUser($faker, $userByNumber = 0)
     {
         $fullname = "";
         $email = "";
         $gender = "";
-        if ($userByNumber > 0) {
-            switch ($tipo) {
-                case 'EM':
-                    $fullname = "Manager " . $userByNumber;
-                    $email = 'manager_' . $userByNumber . '@mail.pt';
-                    break;
-                case 'EC':
-                    $fullname = "Chef " . $userByNumber;
-                    $email = 'chef_' . $userByNumber . '@mail.pt';
-                    break;
-                case 'ED':
-                    $fullname = "Delivery " . $userByNumber;
-                    $email = 'delivery_' . $userByNumber . '@mail.pt';
-                    break;
-                case 'C':
-                    $fullname = "Customer " . $userByNumber;
-                    $email = 'customer_' . $userByNumber . '@mail.pt';
-                    break;
-                case 'D':
-                    $fullname = "Driver " . $userByNumber;
-                    $email = 'driver_' . $userByNumber . '@mail.pt';
-                    break;
-            }
-        } else {
-            static::randomName($faker, $gender, $fullname, $email);
-        }
+        static::randomName($faker, $gender, $fullname, $email);
 
         $createdAt = $faker->dateTimeBetween('-10 years', '-3 months');
         $email_verified_at = $faker->dateTimeBetween($createdAt, '-2 months');
@@ -136,12 +76,15 @@ class UsersSeeder extends Seeder
             'email_verified_at' => $email_verified_at,
             'password' => bcrypt('123'),
             'remember_token' => $faker->asciify('**********'), //str_random(10),
+            'phone_number' => $faker->mobileNumber(),
+            'license_plate' => strtoupper($faker->unique()->bothify('??-##-??')),
+            'nif' => $faker->randomNumber($nbDigits = 9, $strict = true),
+            'balance' => 0,
+            'photo_url' => null,
             'created_at' => $createdAt,
             'updated_at' => $updatedAt,
             'deleted_at' => null,
-            'type' => $tipo,
             'blocked' => false,
-            'photo_url' => null,
             'gender' => $gender,
         ];
     }
@@ -157,39 +100,6 @@ class UsersSeeder extends Seeder
 
         UsersSeeder::$allUsers[$newId] = $userInfo;
 
-        if ($user['type'] == 'C') {
-            $paymentType = $faker->randomElement($this->paymentTypes);
-            if (($paymentType == 'PAYPAL') && (rand(1, 15) > 2)) {
-                $paymentRef = $userInfo['email'];
-            } else {
-                $paymentRef = static::getRandomPaymentReference($faker, $paymentType);
-            }
-
-            DB::table('customers')->insert([
-                'user_id' => $newId,
-                'phone' => (($paymentType == 'MBWAY') && (rand(1, 15) > 2)) ? $paymentRef : $faker->phoneNumber,
-                'nif' => $faker->randomNumber($nbDigits = 9, $strict = true),
-                'points' => rand(0, 125),
-                'default_payment_type' => $paymentType,
-                'default_payment_reference' => $paymentRef,
-                'created_at' => $user['created_at'],
-                'updated_at' => $user['updated_at'],
-                'deleted_at' => $user['deleted_at'],
-            ]);
-        }
-
-        if ($user['type'] == 'D') {
-
-            DB::table('drivers')->insert([
-                'user_id' => $newId,
-                'phone_number' => $faker->phoneNumber,
-                'license_plate' => strtoupper($faker->unique()->bothify('??-##-??')),
-                'nif' => $faker->randomNumber($nbDigits = 9, $strict = true),
-                'created_at' => $user['created_at'],
-                'updated_at' => $user['updated_at'],
-                'deleted_at' => $user['deleted_at'],
-            ]);
-        }
         return $userInfo;
     }
 
@@ -206,7 +116,7 @@ class UsersSeeder extends Seeder
     private function updateFoto($userInfo)
     {
         $fileName = null;
-        if ($userInfo['gender'] == 'male') {
+        if ($userInfo['gender'] == 'M') {
             if (count($this->files_M)) {
                 $fileName = array_shift($this->files_M);
             }
@@ -220,28 +130,6 @@ class UsersSeeder extends Seeder
         }
         return $fileName;
     }
-
-    private function updateRandomFotos()
-    {
-        $ids = DB::table('users')->whereNull('photo_url')->pluck('id')->toArray();
-        while (count($ids) && (count($this->files_F) || count($this->files_M))) {
-            shuffle($ids);
-            $this->updateFoto(UsersSeeder::$allUsers[array_shift($ids)]);
-        }
-    }
-
-    private function softdeletes($userType, $totalSoftDeletes)
-    {
-        $ids = DB::table('users')->whereNot('email', 'like', '%\_%')->where('type', $userType)->pluck('id')->toArray();
-        var_dump($ids);
-        while ($totalSoftDeletes) {
-            shuffle($ids);
-            $userInfo = UsersSeeder::$allUsers[array_shift($ids)];
-            DB::update('update users set deleted_at = updated_at, blocked=1 where id = ?', [$userInfo['id']]);
-            $totalSoftDeletes--;
-        }
-    }
-
 
     private static function stripAccents($stripAccents)
     {

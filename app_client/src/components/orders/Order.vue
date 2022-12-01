@@ -42,7 +42,7 @@ const loadOrder = (id) => {
   }
 }
 
-const save = () => {
+/*const save = () => {
   errors.value = null
 
   if (operation.value == 'insert') {
@@ -86,7 +86,7 @@ const save = () => {
 const cancel = () => {
   originalValueStr = dataAsString()
   router.back()
-}
+}*/
 
 const dataAsString = () => {
   return JSON.stringify(order.value)
@@ -155,6 +155,6 @@ onMounted(() => {
     msg="Do you really want to leave? You have unsaved changes!" @confirmed="leaveConfirmed">
   </confirmation-dialog>
 
-  <OrderDetail :operationType="operation" :order="order" :users="users" :errors="errors" @save="save" @cancel="cancel">
+  <OrderDetail :operationType="operation" :order="order" :users="users" :errors="errors">
   </OrderDetail>
 </template>

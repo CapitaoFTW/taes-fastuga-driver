@@ -22,8 +22,9 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'password' => Hash::make($this->password),
             'photo_url' => $this->photo_url,
-            'license_plate' => $this->driver ? $this->driver->license_plate : null,
-            'phone_number' => $this->driver ? $this->driver->phone_number : null,
+            'license_plate' => $this->license_plate,
+            'phone_number' => $this->phone_number,
+            'balance' => $this->balance,
         ];
     }
 }

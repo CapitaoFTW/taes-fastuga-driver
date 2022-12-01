@@ -40,7 +40,7 @@ const changePassword = async () => {
   <form class="row pt-4 needs-validation justify-content-center" novalidate @submit.prevent="changePassword">
     <h3 class="mb-3">Change Password</h3>
     <hr>
-    <div class="w-50 pt-5 mt-5">
+    <div class="w-75 mt-5">
       <div class="mb-3">
         <div class="mb-3">
           <label for="inputCurrentPassword" class="form-label">Current Password</label>

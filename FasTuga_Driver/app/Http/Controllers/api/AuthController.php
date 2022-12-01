@@ -7,7 +7,6 @@ use App\Http\Middleware\Authenticate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
-use App\Models\Driver;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\AuthenticateUserRequest;
 use Illuminate\Support\Facades\Hash;
@@ -62,20 +61,14 @@ class AuthController extends Controller
     {
         $validated = $request->validated();
 
-        $user = User::create([
+        User::create([
             'name' => $validated['name'],
             'email' => $validated['username'],
             'password' => Hash::make($validated['password']),
-            'type' => 'D',
+            'license_plate' => $validated['license_plate'],
+            'phone_number' => $validated['phone_number'],
+            'balance' => 0,
         ]);
-
-        $driver = new Driver;
-
-        $driver->user_id = $user->id;
-        $driver->license_plate = $validated['license_plate'];
-        $driver->phone_number = $validated['phone_number'];
-
-        $driver->save();
 
         return $this->login($request);
     }

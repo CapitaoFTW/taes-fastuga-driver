@@ -22,6 +22,10 @@ class User extends Authenticatable
         'password',
         'photo_url',
         'type',
+        'phone_number',
+        'license_plate',
+        'balance',
+        'nif',
     ];
 
     /**
@@ -46,13 +50,5 @@ class User extends Authenticatable
     public function orders()
     {
         return $this->hasMany(Order::class, 'delivered_by');
-    }
-
-    public function driver() {
-        return $this -> hasOne(Driver:: class, 'user_id', 'id');
-    }
-
-    public function customer() {
-        return $this -> hasOne(Customer:: class, 'user_id', 'id');
     }
 }
