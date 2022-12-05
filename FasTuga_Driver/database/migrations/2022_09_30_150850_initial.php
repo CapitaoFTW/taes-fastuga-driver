@@ -23,15 +23,15 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->integer('ticket_number');
-            $table->enum('status', ['P', 'R', 'D', 'C', 'O']);
-            // P "Preparing", R "Ready", D "Delivered", C "Cancelled", O "Ongoing"
+            $table->enum('status', ['P', 'R', 'O', 'C', 'D']);
+            // P "Preparing", R "Ready", O "Ongoing", C "Cancelled", D "Delivered"
             $table->decimal('total_price', 8, 2);
-            $table->string('street_address');
+            $table->string('distance');
             $table->integer('quantity')->unsigned();
             // The Driver that delivered the order
             // null if order was not delivered (status != "D")
-            $table->bigInteger('delivered_by')->unsigned()->nullable();
-            $table->foreign('delivered_by')->references('id')->on('users');
+            $table->bigInteger('driver_id')->unsigned()->nullable();
+            $table->foreign('driver_id')->references('id')->on('users');
 
             $table->date('date');                          // Order date (only the day)
             $table->json('custom')->nullable();
@@ -40,6 +40,7 @@ return new class extends Migration
             // Index by date & by status for faster queries
             $table->index('date');
             $table->index('status');
+            $table->boolean('accepted')->default(false);
         });
     }
 

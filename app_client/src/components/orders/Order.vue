@@ -16,7 +16,7 @@ const newOrder = () => {
     ticket_number: '',
     status: 'P',
     total_price: null,
-    delivered_by: userStore.userId
+    driver_id: null
   }
 }
 
@@ -130,9 +130,12 @@ const operation = computed(() => {
 
 watch(
   () => props.id,
+  
   (newValue) => {
+    
     loadOrder(newValue)
   }, {
+
   immediate: true,
 }
 )

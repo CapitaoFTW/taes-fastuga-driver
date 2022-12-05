@@ -97,7 +97,7 @@ const clickMenuOption = () => {
           </li>
           <li class="nav-item dropdown" v-show="userStore.user">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-              data-bs-toggle="dropdown" aria-expanded="false">€ 17,39
+              data-bs-toggle="dropdown" aria-expanded="false">{{"€ " + userStore.user?.balance }}
               <img :src="userStore.userPhotoUrl" class="rounded-circle z-depth-0 avatar-img" alt="avatar image" />
               <span class="avatar-text">{{ userStore.user?.name ?? "Anonymous" }}</span>
             </a>
@@ -139,7 +139,7 @@ const clickMenuOption = () => {
             <li class="nav-item">
               <router-link class="nav-link" :class="{ active: $route.name === 'Orders' }" :to="{ name: 'Orders' }"
                 @click="clickMenuOption">
-                <i class="bi bi-receipt-cutoff"></i>
+                <i class="bi bi-receipt"></i>
                 Orders
               </router-link>
             </li>

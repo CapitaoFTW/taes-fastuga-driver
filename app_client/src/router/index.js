@@ -103,8 +103,14 @@ router.beforeEach((to, from, next) => {
   }
 
   const userStore = useUserStore()
+  
+  if (to.name == 'Dashboard') {
+    next({ name: 'Orders' })
+    return
+  }
+
   if (userStore.user && (to.name == 'Register' || to.name == 'Login')) {
-    next({ name: 'Dashboard' })
+    next({ name: 'Orders' })
     return
   }
 
@@ -120,14 +126,14 @@ router.beforeEach((to, from, next) => {
 
   if (to.name == 'Reports') {
     if (userStore.user.type != 'D') {
-      next({ name: 'Dashboard' })
+      next({ name: 'Orders' })
       return
     }
   }
 
-  if (to.name != 'Dashboard' && to.name != 'Register' && to.name != 'Login' && to.name != 'ChangePassword' && to.name != 'Orders' && to.name != 'NewOrder'
+  if (to.name != 'Register' && to.name != 'Login' && to.name != 'ChangePassword' && to.name != 'Orders' && to.name != 'NewOrder'
   && to.name != 'Order' && to.name != 'Users' && to.name != 'User' && to.name != 'Reports' && to.name != 'about') {
-    next({ name: 'Dashboard' })
+    next({ name: 'Orders' })
     return
   }
 
@@ -137,7 +143,7 @@ router.beforeEach((to, from, next) => {
       return
     }
 
-    next({ name: 'Dashboard' })
+    next({ name: 'Orders' })
     return
   }
 

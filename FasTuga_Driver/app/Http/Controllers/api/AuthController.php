@@ -43,6 +43,7 @@ class AuthController extends Controller
             $errorCode = $response->getStatusCode();
             $auth_server_response = json_decode((string) $response->content(), true);
             return response()->json($auth_server_response, $errorCode);
+
         } catch (\Exception $e) {
             return response()->json('Authentication has failed!', 401);
         }

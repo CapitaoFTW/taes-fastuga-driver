@@ -13,8 +13,17 @@ class OrderController extends Controller
 {
     public function index(Request $request)
     {
-        $orders = Order::all();
+        $orders = Order::where('status', '!=', 'C', 'and', 'status', 'D')->get()->sortBy('distance');
         return OrderResource::collection($orders);
+    }
+
+    public function update_accepted(Request $request, Order $order, User $user) {
+
+        $order->driver_id = $user->id;
+        $order->accepted = 1;
+        $order->save();
+
+        return new OrderResource($order);
     }
 
     public function getOrdersOfUser(User $user)

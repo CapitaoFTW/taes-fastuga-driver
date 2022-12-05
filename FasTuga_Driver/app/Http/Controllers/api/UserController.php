@@ -22,7 +22,7 @@ class UserController extends Controller
 
     public function index()
     {
-        return UserResource::collection(User::all()->where('type', 'D'));
+        return UserResource::collection(User::all());
     }
 
     public function show(User $user)

@@ -20,10 +20,11 @@ class OrderResource extends JsonResource
             'status' => $this->status,
             'status_name' => $this->statusName,
             'total_price' => $this->total_price,
-            'street_address' => $this->street_address,
+            'distance' => $this->distance,
             'quantity' => $this->quantity,
-            'delivered_by' => $this->delivered_by,
+            'driver_id' => $this->driver_id,
             'driver' => $this->user->name ?? null,
+            'accepted' => $this->accepted,
         ];
     }
 }

@@ -24,6 +24,7 @@ const order = ref(props.order)
 
 watch(
   () => props.order,
+  
   (newOrder) => {
     order.value = newOrder
   }

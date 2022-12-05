@@ -7,6 +7,7 @@ use App\Http\Controllers\api\OrderController;
 
 Route::POST('login', [AuthController::class, 'loginUser']);
 Route::POST('register', [AuthController::class, 'register']);
+Route::patch('orders/{order}/{user}/accepted', [OrderController::class, 'update_accepted']);
 
 Route::middleware('auth:api')->group(function () {
     Route::POST('logout', [AuthController::class, 'logout']);

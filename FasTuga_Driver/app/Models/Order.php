@@ -13,9 +13,10 @@ class Order extends Model
         'ticket_number',
         'status',
         'total_price',
-        'street_address',
+        'distance',
         'quantity',
-        'delivered_by',
+        'driver_id',
+        'accepted',
     ];
 
     public function getStatusNameAttribute()
@@ -36,6 +37,6 @@ class Order extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class,  'delivered_by', 'id');
+        return $this->belongsTo(User::class,  'driver_id', 'id');
     }
 }

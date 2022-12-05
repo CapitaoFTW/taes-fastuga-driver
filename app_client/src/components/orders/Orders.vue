@@ -28,10 +28,10 @@ const loadUsers = () => {
     .then((response) => {
       users.value = response.data.data
     })
-    
+
     .catch((error) => {
       console.log(error)
- 
+
     })
 }
 
@@ -39,12 +39,30 @@ const showOrder = (order) => {
   router.push({ name: 'Order', params: { id: order.id } })
 }
 
+const acceptOrder = (order, user) => {
+  if (order.accepted == 0)
+    order.accepted = 1
+
+  else
+    order.accepted = 0
+
+  axios.patch("orders/" + order.id + "/" + user.id + "/accepted", { accepted: order.accepted })
+    .then((response) => {
+      toast.success("Order #" + order.ticket_number + " was accepted")
+      router.go(0)
+    })
+
+    .catch((error) => {
+      console.log(error)
+    })
+}
+
 const filteredOrders = computed(() => {
   return orders.value.filter(p => (!filterByStatus.value || filterByStatus.value == p.status))
 })
 
 const totalOrders = computed(() => {
-  return orders.value.reduce((c, p) => (!filterByStatus.value || filterByStatus.value == p.status) ? c + 1 : c, 0)
+  return orders.value
 })
 
 onMounted(() => {
@@ -61,8 +79,14 @@ onMounted(() => {
     <div class="mx-2">
       <h3 class="mt-4">Orders</h3>
     </div>
-    <div class="mx-2 total-filtro">
-      <h5 class="mt-4">Total: {{ totalOrders }} orders</h5>
+  </div>
+  <hr>
+  <order-table :orders="totalOrders" :showMine="false" :showDates="true" @show="showOrder" @accept="acceptOrder">
+  </order-table>
+  <hr>
+  <div class="d-flex justify-content-between">
+    <div class="mx-2">
+      <h3 class="mt-2">My Orders</h3>
     </div>
   </div>
   <hr>
@@ -73,13 +97,10 @@ onMounted(() => {
         <option :value="null" disabled>Choose an option</option>
         <option value="P">Preparing</option>
         <option value="R">Ready</option>
-        <option value="C">Cancelled</option>
-        <option value="D">Delivered</option>
-        <option value="O">Ongoing</option>
       </select>
     </div>
   </div>
-  <order-table :orders="filteredOrders" :showId="true" :showDates="true" @show="showOrder">
+  <order-table :orders="filteredOrders" :showMine="true" :showDates="true" @show="showOrder">
   </order-table>
 </template>
 

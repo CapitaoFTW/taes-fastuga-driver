@@ -23,7 +23,7 @@ class OrdersSeeder extends Seeder
         if (DatabaseSeeder::$seedType == "full") {
             $this->numberOfDays = 2 * 365;   // 2 ANOS
         } else {
-            $this->numberOfDays = 60;      // 2 meses
+            $this->numberOfDays = 10;      // 2 meses
         }
 
         $this->command->info("Order seeder - Start");
@@ -72,9 +72,9 @@ class OrdersSeeder extends Seeder
             'status' => $faker->randomElement(['P','R','C']),
             'ticket_number' => $orderNumberOfDay % 99 + 1,
             'total_price' => $faker->randomFloat(2, 0, 50),
-            'street_address' => $faker->address(),
+            'distance' => $faker->randomFloat(1, 1, 100) . '0',
             'quantity' => $faker->randomNumber(2, false),
-            'delivered_by' => NULL,
+            'driver_id' => NULL,
 
             'date' =>  $day->format('Y-m-d'),
             'created_at' => $inicio,

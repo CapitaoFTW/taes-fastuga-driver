@@ -27,8 +27,8 @@ class UpdateUserRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             //'photo_file' => 'nullable|file|image',
-            'license_plate' => ['required', 'string', Rule::unique('drivers', 'license_plate')->ignore($this->id), 'regex:/[A-z]{2}-[0-9]{2}-[A-z]{2}|[0-9]{2}-[A-z]{2}-[0-9]{2}|[0-9]{2}-[0-9]{2}-[A-z]{2}|[A-z]{2}-[0-9]{2}-[0-9]{2}|[A-z]{2}[0-9]{2}[A-z]{2}|[0-9]{2}[A-z]{2}[0-9]{2}|[0-9]{2}[0-9]{2}[A-z]{2}|[A-z]{2}[0-9]{2}[0-9]{2}/'],
-            'phone_number' => ['required', 'max:9', 'regex:/[9][0-9]{8}|[2][0-9]{8}/'],
+            'license_plate' => ['required', 'string', Rule::unique('users', 'license_plate')->ignore($this->id), 'regex:/[A-z]{2}-[0-9]{2}-[A-z]{2}|[0-9]{2}-[A-z]{2}-[0-9]{2}|[0-9]{2}-[0-9]{2}-[A-z]{2}|[A-z]{2}-[0-9]{2}-[0-9]{2}|[A-z]{2}[0-9]{2}[A-z]{2}|[0-9]{2}[A-z]{2}[0-9]{2}|[0-9]{2}[0-9]{2}[A-z]{2}|[A-z]{2}[0-9]{2}[0-9]{2}/'],
+            'phone_number' => 'required|max:9|starts_with:2,9',
         ];
     }
 
@@ -36,7 +36,6 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'license_plate.regex' => 'The :attribute format must follow Portugal license plate patterns.',
-            'phone_number.regex' => 'The :attribute format must follow Portugal phone number patterns.',
         ];
     }
 }
