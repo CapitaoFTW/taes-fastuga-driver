@@ -25,16 +25,17 @@ class UpdateUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255',
-            //'photo_file' => 'nullable|file|image',
-            'license_plate' => ['required', 'string', Rule::unique('users', 'license_plate')->ignore($this->id), 'regex:/[A-z]{2}-[0-9]{2}-[A-z]{2}|[0-9]{2}-[A-z]{2}-[0-9]{2}|[0-9]{2}-[0-9]{2}-[A-z]{2}|[A-z]{2}-[0-9]{2}-[0-9]{2}|[A-z]{2}[0-9]{2}[A-z]{2}|[0-9]{2}[A-z]{2}[0-9]{2}|[0-9]{2}[0-9]{2}[A-z]{2}|[A-z]{2}[0-9]{2}[0-9]{2}/'],
-            'phone_number' => 'required|max:9|starts_with:2,9',
+            'name' => 'string|max:255',
+            'photo' => ['starts_with:data:image/png,data:image/jpeg,data:image/svg'],
+            'license_plate' => ['string', Rule::unique('users', 'license_plate')->ignore($this->id), 'regex:/[A-z]{2}-[0-9]{2}-[A-z]{2}|[0-9]{2}-[A-z]{2}-[0-9]{2}|[0-9]{2}-[0-9]{2}-[A-z]{2}|[A-z]{2}-[0-9]{2}-[0-9]{2}|[A-z]{2}[0-9]{2}[A-z]{2}|[0-9]{2}[A-z]{2}[0-9]{2}|[0-9]{2}[0-9]{2}[A-z]{2}|[A-z]{2}[0-9]{2}[0-9]{2}/'],
+            'phone_number' => 'max:9|starts_with:2,9',
         ];
     }
 
     public function messages()
     {
         return [
+            'photo.starts_with' => 'The image uploaded must be in PNG/JPG/SVG format.',
             'license_plate.regex' => 'The :attribute format must follow Portugal license plate patterns.',
         ];
     }

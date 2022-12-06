@@ -12,13 +12,7 @@ const props = defineProps({
   errors: {
     type: Object,
     required: false
-  }/*,
-  uploadFile() {
-    var files = this.$refs.photo.files;
-    var data = new FormData();
-   // data.append('logo', files[0]);
-   console.log(data);
-}*/
+  }
 })
 
 const emit = defineEmits(["save", "cancel"]);
@@ -47,6 +41,27 @@ const cancel = () => {
   emit("cancel", editingUser.value);
 }
 
+const convertBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+        const fileReader = new FileReader();
+        fileReader.readAsDataURL(file);
+
+        fileReader.onload = () => {
+            resolve(fileReader.result);
+        };
+
+        fileReader.onerror = (error) => {
+            reject(error);
+        };
+    });
+};
+
+const uploadImage = async (e) => {
+  const image = e.target.files[0]
+    const base64 = await convertBase64(image)
+    editingUser.value.photo = base64
+};
+
 </script>
 
 <template>
@@ -54,12 +69,12 @@ const cancel = () => {
     <h3 class="mb-3">Profile</h3>
     <hr>
     <div class="w-75">
-      <div class="text-center pt-3">
-        <img :src="photoFullUrl" class="img-fluid rounded-circle"/>
+      <div class="text-center pt-3 mb-3">
+        <img :src="photoFullUrl" class="img-fluid rounded-circle z-depth-0"/>
         <br />
-        <input ref="photo" type="file" name="photo" id="photo" class="inputPhoto text-primary" @change="uploadFile" />
+        <input type="file" name="photo" id="photo" class="inputPhoto text-primary" @change="uploadImage" />
         <label class="text-primary" for="photo">Alterar Foto</label>
-        <field-error-message :errors="errors" fieldName="photo_url"></field-error-message>
+        <field-error-message :errors="errors" fieldName="photo"></field-error-message>
       </div>
       <div class="mb-2">
         <label for="inputName" class="form-label">Name</label>
@@ -111,4 +126,10 @@ const cancel = () => {
   /* "hand" cursor */
   font-weight: bold;
 }
+
+.img-fluid {
+  width: 115px;
+  height: 115px;
+}
+
 </style>

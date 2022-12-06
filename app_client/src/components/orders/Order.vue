@@ -16,13 +16,14 @@ const newOrder = () => {
     ticket_number: '',
     status: 'P',
     total_price: null,
-    driver_id: null
+    driver_id: null,
+    accepted: 0,
+    delivered: 0,
   }
 }
 
-let originalValueStr = ''
 const loadOrder = (id) => {
-  originalValueStr = ''
+  let originalValueStr = ''
   errors.value = null
 
   if (!id || (id < 0)) {
@@ -42,75 +43,9 @@ const loadOrder = (id) => {
   }
 }
 
-/*const save = () => {
-  errors.value = null
-
-  if (operation.value == 'insert') {
-    axios.post('orders', order.value)
-      .then((response) => {
-        order.value = response.data.data
-        originalValueStr = dataAsString()
-        toast.success('Order #' + order.value.id + ' was created successfully.')
-        router.back()
-      })
-
-      .catch((error) => {
-        if (error.response.status == 422) {
-          toast.error('Order was not created due to validation errors!')
-          errors.value = error.response.data.errors
-        } else {
-          toast.error('Order was not created due to unknown server error!')
-        }
-      })
-
-  } else {
-    axios.put('orders/' + props.id, order.value)
-      .then((response) => {
-        order.value = response.data.data
-        originalValueStr = dataAsString()
-        toast.success('Order #' + order.value.id + ' was updated successfully.')
-        router.back()
-      })
-
-      .catch((error) => {
-        if (error.response.status == 422) {
-          toast.error('Order #' + props.id + ' was not updated due to validation errors!')
-          errors.value = error.response.data.errors
-        } else {
-          toast.error('Order #' + props.id + ' was not updated due to unknown server error!')
-        }
-      })
-  }
-}
-
-const cancel = () => {
-  originalValueStr = dataAsString()
-  router.back()
-}*/
-
 const dataAsString = () => {
   return JSON.stringify(order.value)
 }
-
-let nextCallBack = null
-const leaveConfirmed = () => {
-  if (nextCallBack) {
-    nextCallBack()
-  }
-}
-
-onBeforeRouteLeave((to, from, next) => {
-  nextCallBack = null
-  let newValueStr = dataAsString()
-
-  if (originalValueStr != newValueStr) {
-    nextCallBack = next
-    confirmationLeaveDialog.value.show()
-    
-  } else {
-    next()
-  }
-})
 
 const props = defineProps({
   id: {
@@ -120,19 +55,13 @@ const props = defineProps({
 })
 
 const order = ref(newOrder())
-const users = ref([])
 const errors = ref(null)
-const confirmationLeaveDialog = ref(null)
-
-const operation = computed(() => {
-  return (!props.id || props.id < 0) ? 'insert' : 'update'
-})
 
 watch(
   () => props.id,
-  
+
   (newValue) => {
-    
+
     loadOrder(newValue)
   }, {
 
@@ -140,24 +69,84 @@ watch(
 }
 )
 
-onMounted(() => {
-  users.value = []
-  axios.get('users')
+const back = () => {
+  router.push({ name: 'Orders' })
+}
+
+const acceptOrder = (userId) => {
+  if (order.value.accepted == 0)
+    order.value.accepted = 1
+
+  else
+    order.value.accepted = 0
+
+  axios.patch("orders/" + order.value.id + "/" + userId + "/accepted")
     .then((response) => {
-      users.value = response.data.data
+      toast.success("Order #" + order.value.ticket_number + " was accepted")
+      loadOrder(order.value.id)
     })
 
     .catch((error) => {
       console.log(error)
     })
+}
+
+const claimOrder = () => {
+  order.value.status = 'O'
+
+  axios.patch("orders/" + order.value.id + "/status", { status: order.value.status })
+    .then((response) => {
+      toast.success("Order #" + order.value.ticket_number + " was claimed")
+      loadOrder(order.value.id)
+    })
+
+    .catch((error) => {
+      console.log(error)
+    })
+}
+
+const completeOrder = (user) => {
+  if (order.value.delivered == 0) {
+    order.value.delivered = 1
+    order.value.status = 'D'
+  
+  } else {
+    order.value.delivered = 0
+  }
+
+  axios.patch("orders/" + order.value.id + "/" + user.id + "/delivered")
+    .then((response) => {
+      toast.success('Order #' + order.value.ticket_number + ' was delivered, ' + ((order.value.distance <= 3) ? (+ '2.00') : (order.value.distance <= 10 ? (+ '3.00') : (+ '4.00'))) + "€ sent to your account!")
+      loadOrder(order.value.id)
+      userStore.loadUser
+    })
+
+    .catch((error) => {
+      console.log(error)
+    })
+}
+
+const cancelOrder = () => {
+  order.value.status = 'C'
+
+  axios.patch("orders/" + order.value.id + "/status", { status: order.value.status })
+    .then((response) => {
+      toast.success("Order #" + order.value.ticket_number + " was cancelled")
+      loadOrder(order.value.id)
+    })
+
+    .catch((error) => {
+      console.log(error)
+    })
+}
+
+onMounted(() => {
+  loadOrder(props.id)
 })
 </script>
 
 <template>
-  <confirmation-dialog ref="confirmationLeaveDialog" confirmationBtn="Discard changes and leave"
-    msg="Do you really want to leave? You have unsaved changes!" @confirmed="leaveConfirmed">
-  </confirmation-dialog>
-
-  <OrderDetail :operationType="operation" :order="order" :users="users" :errors="errors">
+  <OrderDetail :order="order" :errors="errors" @back="back" @accept="acceptOrder" @claim="claimOrder"
+    @complete="completeOrder" @cancel="cancelOrder">
   </OrderDetail>
 </template>

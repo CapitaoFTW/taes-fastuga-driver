@@ -11,14 +11,15 @@ use App\Http\Requests\StoreUpdateOrderRequest;
 
 class OrderController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $orders = Order::where('status', '!=', 'C', 'and', 'status', 'D')->get()->sortBy('distance');
+        $orders = Order::get()->sortBy('distance');
+
         return OrderResource::collection($orders);
     }
 
-    public function update_accepted(Request $request, Order $order, User $user) {
-
+    public function update_accepted(Order $order, User $user)
+    {
         $order->driver_id = $user->id;
         $order->accepted = 1;
         $order->save();
@@ -26,14 +27,32 @@ class OrderController extends Controller
         return new OrderResource($order);
     }
 
-    public function getOrdersOfUser(User $user)
+    public function update_status(Request $request, Order $order)
     {
-        return OrderResource::collection($user->orders);
+        $order->status = $request['status'];
+        $order->save();
+
+        return new OrderResource($order);
     }
 
-    public function getOrdersInProgressOfUser(User $user)
+    public function update_delivered(Order $order, User $user)
     {
-        return OrderResource::collection($user->orders()->where('status', 'in', 'P, R')->get());
+        $order->delivered = 1;
+        $order->status = 'D';
+        $order->save();
+
+        if ($order->distance <= 3)
+        $user->balance += 2;
+
+        else if ($order->distance <= 10)
+        $user->balance += 3;
+
+        else
+        $user->balance += 4;
+
+        $user->save();
+
+        return new OrderResource($order);
     }
 
     public function show(Order $order)

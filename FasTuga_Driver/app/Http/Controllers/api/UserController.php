@@ -6,20 +6,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Resources\UserResource;
-use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserRequest;
-use App\Http\Requests\UpdateUserPasswordRequest;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
 
 class UserController extends Controller
 {
-    /*public function create(CreateUserRequest $request, User $user)
-    {
-        $user->create($request->validated());
-        return new UserResource($user);
-    }*/
-
     public function index()
     {
         return UserResource::collection(User::all());
@@ -32,7 +26,29 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $request, User $user)
     {
-        $user->update($request->validated());
+        $validated = $request->validated();
+
+        $user->update($validated);
+
+        if ($request->has('photo')) {
+            Storage::delete('storage/fotos/' . $user->photo_url);
+            $image_64 = $request['photo'];
+            $extension = explode('/', explode(':', substr($image_64, 0, strpos($image_64, ';')))[1])[1];
+
+            if ($extension == 'jpeg')
+                $extension = 'jpg';
+
+            $replace = substr($image_64, 0, strpos($image_64, ',') + 1);
+            $image = str_replace($replace, '', $image_64);
+            $image = str_replace(' ', '+', $image);
+            $imageName = Str::random(10) . '.' . $extension;
+
+            Storage::put('public/fotos/' . $imageName, base64_decode($image));
+
+            $user->photo_url = $imageName;
+            $user->save();
+        }
+
         return new UserResource($user);
     }
 
@@ -57,7 +73,7 @@ class UserController extends Controller
     public function show_me(Request $request)
     {
         $user = $request->user();
-        $user->name = explode(" ", $user->name)[0] . " " . explode(" ", $user->name)[substr_count($user->name, " ")];
+        //$user->name = explode(" ", $user->name)[0] . " " . explode(" ", $user->name)[substr_count($user->name, " ")];
         return new UserResource($user);
     }
 }

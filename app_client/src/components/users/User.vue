@@ -1,11 +1,15 @@
 <script setup>
 import { ref, watch, inject } from 'vue'
 import { useRouter, onBeforeRouteLeave } from 'vue-router'
+import { useUserStore } from '../../stores/user';
 import UserDetail from "./UserDetail.vue"
 
 const router = useRouter()
 const axios = inject('axios')
 const toast = inject('toast')
+const userStore = useUserStore()
+
+const emit = defineEmits(['updated'])
 
 const props = defineProps({
   id: {
@@ -19,7 +23,6 @@ const newUser = () => {
     id: null,
     name: '',
     email: '',
-    gender: 'M',
     photo_url: null,
     license_plate: '',
     phone_number: '',
@@ -56,7 +59,8 @@ const save = () => {
       user.value = response.data.data
       originalValueStr = dataAsString()
       toast.success('User was updated successfully.')
-      router.back()
+      userStore.user = user.value
+      userStore.loadUser()
     })
 
     .catch((error) => {

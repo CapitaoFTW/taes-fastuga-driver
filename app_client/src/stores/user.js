@@ -7,7 +7,6 @@ export const useUserStore = defineStore('user', () => {
     const serverBaseUrl = inject('serverBaseUrl')
     
     const user = ref(null)
-    const inProgressOrders = ref([])
     
     const userPhotoUrl = computed(() => {
         if (!user.value?.photo_url) {
@@ -35,21 +34,6 @@ export const useUserStore = defineStore('user', () => {
         sessionStorage.removeItem('token')
         user.value = null
     }  
-    
-    async function loadInProgressOrders () {
-        try {
-            const response = await axios.get('users/' + userId.value + '/orders/inprogress')
-            inProgressOrders.value = response.data.data
-        } 
-        catch(error) {
-            clearInProgressOrders()
-            throw error
-        }
-    }
-
-    function clearInProgressOrders () {
-        inProgressOrders.value = []
-    }
 
     async function login (credentials) {
         try {
@@ -57,12 +41,10 @@ export const useUserStore = defineStore('user', () => {
             axios.defaults.headers.common.Authorization = "Bearer " + response.data.access_token
             sessionStorage.setItem('token', response.data.access_token)
             await loadUser()
-            await loadInProgressOrders()
             return false
         } 
         catch(error) {
             clearUser()
-            clearInProgressOrders()
             return error
         }
     }
@@ -73,12 +55,10 @@ export const useUserStore = defineStore('user', () => {
             axios.defaults.headers.common.Authorization = "Bearer " + response.data.access_token
             sessionStorage.setItem('token', response.data.access_token)
             await loadUser()
-            await loadInProgressOrders()
             return false
         } 
         catch(error) {
             clearUser()
-            clearInProgressOrders()
             return error
         }
     }
@@ -87,7 +67,6 @@ export const useUserStore = defineStore('user', () => {
         try {
             await axios.post('logout')
             clearUser()
-            clearInProgressOrders()
             return true
 
         } catch (error) {
@@ -110,12 +89,11 @@ export const useUserStore = defineStore('user', () => {
         if (storedToken) {
             axios.defaults.headers.common.Authorization = "Bearer " + storedToken
             await loadUser()
-            await loadInProgressOrders()
             return true
         }
         clearUser()
         return false
     }
     
-    return { user, inProgressOrders, userId, userPhotoUrl, login, register, changePassword, logout, restoreToken }
+    return { user, userId, userPhotoUrl, login, register, changePassword, logout, restoreToken }
 })

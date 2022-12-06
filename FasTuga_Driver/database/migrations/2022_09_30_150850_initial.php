@@ -41,6 +41,7 @@ return new class extends Migration
             $table->index('date');
             $table->index('status');
             $table->boolean('accepted')->default(false);
+            $table->boolean('delivered')->default(false);
         });
     }
 

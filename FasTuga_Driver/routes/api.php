@@ -7,7 +7,6 @@ use App\Http\Controllers\api\OrderController;
 
 Route::POST('login', [AuthController::class, 'loginUser']);
 Route::POST('register', [AuthController::class, 'register']);
-Route::patch('orders/{order}/{user}/accepted', [OrderController::class, 'update_accepted']);
 
 Route::middleware('auth:api')->group(function () {
     Route::POST('logout', [AuthController::class, 'logout']);
@@ -24,6 +23,8 @@ Route::middleware('auth:api')->group(function () {
 
     Route::GET('orders', [OrderController::class, 'index']);
     Route::GET('orders/{order}', [OrderController::class, 'show']);
-    Route::GET('users/{user}/orders', [OrderController::class, 'getOrdersOfUser']);
-    Route::GET('users/{user}/orders/inprogress', [OrderController::class, 'getOrdersInProgressOfUser']);
+
+    Route::PATCH('orders/{order}/{user}/accepted', [OrderController::class, 'update_accepted']);
+    Route::PATCH('orders/{order}/{user}/delivered', [OrderController::class, 'update_delivered']);
+    Route::PATCH('orders/{order}/status', [OrderController::class, 'update_status']);
 });

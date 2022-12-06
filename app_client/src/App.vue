@@ -47,7 +47,7 @@ const clickMenuOption = () => {
               <li>
                 <router-link class="dropdown-item" :class="{ active: $route.name === 'Orders' }"
                   :to="{ name: 'Orders' }" @click="clickMenuOption">
-                  <i class="bi bi-receipt-cutoff"></i><span class="position-absolute" style="top: 1.1rem; left:3rem">Orders</span>
+                  <i class="bi bi-receipt"></i><span class="position-absolute" style="top: 1.1rem; left:3rem">Orders</span>
                 </router-link>
               </li>
               <li>
@@ -103,10 +103,16 @@ const clickMenuOption = () => {
             </a>
             <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
               <li>
+                <router-link class="dropdown-item" :class="{ active: $route.name === 'Orders' }"
+                  :to="{ name: 'Orders' }" @click="clickMenuOption">
+                  <i class="bi bi-receipt"></i><span class="position-absolute" style="top: 1.1rem; left:3rem">Orders</span>
+                </router-link>
+              </li>
+              <li>
                 <router-link class="dropdown-item"
                   :class="{ active: $route.name == 'User' && $route.params.id == userStore.userId }"
                   :to="{ name: 'User', params: { id: userStore.userId } }" @click="clickMenuOption">
-                  <i class="bi bi-person-square"></i><span class="position-absolute" style="top: 1.1rem">Profile</span>
+                  <i class="bi bi-person-square"></i><span class="position-absolute" style="top: 3.6rem; left:3rem">Profile</span>
                 </router-link>
               </li>
               <li>

@@ -25,6 +25,7 @@ class OrderResource extends JsonResource
             'driver_id' => $this->driver_id,
             'driver' => $this->user->name ?? null,
             'accepted' => $this->accepted,
+            'delivered' => $this->delivered,
         ];
     }
 }

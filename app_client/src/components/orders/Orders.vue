@@ -9,8 +9,8 @@ const axios = inject("axios")
 const toast = inject("toast")
 
 const orders = ref([])
-const users = ref([])
 const filterByStatus = ref('P')
+const filterByMyStatus = ref('P')
 
 const loadOrders = () => {
   axios.get('orders')
@@ -23,33 +23,69 @@ const loadOrders = () => {
     })
 }
 
-const loadUsers = () => {
-  axios.get('users')
-    .then((response) => {
-      users.value = response.data.data
-    })
-
-    .catch((error) => {
-      console.log(error)
-
-    })
-}
-
 const showOrder = (order) => {
   router.push({ name: 'Order', params: { id: order.id } })
 }
 
-const acceptOrder = (order, user) => {
+const acceptOrder = (order, userId) => {
   if (order.accepted == 0)
     order.accepted = 1
 
   else
     order.accepted = 0
 
-  axios.patch("orders/" + order.id + "/" + user.id + "/accepted", { accepted: order.accepted })
+  axios.patch("orders/" + order.id + "/" + userId + "/accepted")
     .then((response) => {
       toast.success("Order #" + order.ticket_number + " was accepted")
-      router.go(0)
+      loadOrders()
+    })
+
+    .catch((error) => {
+      console.log(error)
+    })
+}
+
+const claimOrder = (order) => {
+  order.status = 'O'
+
+  axios.patch("orders/" + order.id + "/status", { status: order.status })
+    .then((response) => {
+      toast.success("Order #" + order.ticket_number + " was claimed")
+      loadOrders()
+    })
+
+    .catch((error) => {
+      console.log(error)
+    })
+}
+
+const completeOrder = (order, user) => {
+  if (order.delivered == 0) {
+    order.delivered = 1
+    order.status = 'D'
+  
+  } else {
+    order.delivered = 0
+  }
+
+  axios.patch("orders/" + order.id + "/" + user.id + "/delivered")
+    .then((response) => {
+      toast.success('Order #' + order.ticket_number + ' was delivered, ' + ((order.distance <= 3) ? (+ '2.00') : (order.distance <= 10 ? (+ '3.00') : (+ '4.00'))) + "€ sent to your account!")
+      loadOrders()
+    })
+
+    .catch((error) => {
+      console.log(error)
+    })
+}
+
+const cancelOrder = (order) => {
+  order.status = 'C'
+
+  axios.patch("orders/" + order.id + "/status", { status: order.status })
+    .then((response) => {
+      toast.success("Order #" + order.ticket_number + " was cancelled")
+      loadOrders()
     })
 
     .catch((error) => {
@@ -61,12 +97,19 @@ const filteredOrders = computed(() => {
   return orders.value.filter(p => (!filterByStatus.value || filterByStatus.value == p.status))
 })
 
+const filteredMyOrders = computed(() => {
+  return orders.value.filter(p => (!filterByMyStatus.value || filterByMyStatus.value == p.status))
+})
+
 const totalOrders = computed(() => {
-  return orders.value
+  return orders.value.filter(p => ('P' == p.status || 'R' == p.status))
+})
+
+const totalMyOrders = computed(() => {
+  return orders.value.length
 })
 
 onMounted(() => {
-  loadUsers()
   // Calling loadOrders refresh the list of orders from the API
   loadOrders()
 })
@@ -81,7 +124,21 @@ onMounted(() => {
     </div>
   </div>
   <hr>
-  <order-table :orders="totalOrders" :showMine="false" :showDates="true" @show="showOrder" @accept="acceptOrder">
+  <div class="mb-3 d-flex justify-content-start flex-wrap">
+    <div class="mx-2 mt-2 filter-div">
+      <label for="selectStatus" class="form-label">Filter by Status:</label>
+      <select class="form-select" id="selectStatus" v-model="filterByStatus">
+        <option :value="null" disabled>Choose a status</option>
+        <option value="P">Preparing</option>
+        <option value="R">Ready</option>
+        <!--<option value="O">Ongoing</option>
+        <option value="C">Cancelled</option>
+        <option value="D">Delivered</option>-->
+      </select>
+    </div>
+  </div>
+  <order-table :orders="filteredOrders" :showMine="false" @show="showOrder" @accept="acceptOrder" @claim="claimOrder"
+    @complete="completeOrder" @cancel="cancelOrder">
   </order-table>
   <hr>
   <div class="d-flex justify-content-between">
@@ -92,15 +149,19 @@ onMounted(() => {
   <hr>
   <div class="mb-3 d-flex justify-content-start flex-wrap">
     <div class="mx-2 mt-2 filter-div">
-      <label for="selectStatus" class="form-label">Filter by status:</label>
-      <select class="form-select" id="selectStatus" v-model="filterByStatus">
-        <option :value="null" disabled>Choose an option</option>
+      <label for="selectStatus" class="form-label">Filter by Status:</label>
+      <select class="form-select" id="selectStatus" v-model="filterByMyStatus">
+        <option :value="null" disabled>Choose a status</option>
         <option value="P">Preparing</option>
         <option value="R">Ready</option>
+        <option value="O">Ongoing</option>
+        <!--<option value="C">Cancelled</option>-->
+        <option value="D">Delivered</option>
       </select>
     </div>
   </div>
-  <order-table :orders="filteredOrders" :showMine="true" :showDates="true" @show="showOrder">
+  <order-table :orders="filteredMyOrders" :showMine="true" @show="showOrder" @claim="claimOrder"
+    @complete="completeOrder" @cancel="cancelOrder">
   </order-table>
 </template>
 
