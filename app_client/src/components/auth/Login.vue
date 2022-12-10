@@ -30,7 +30,7 @@ const login = async () => {
     toast.success('User ' + userStore.user.name + ' has entered the application.')
 
     emit('login')
-    router.push({ name: 'User', params: { id: userStore.user.id } })
+    router.push({ name: 'Orders' })
   }
 }
 </script>

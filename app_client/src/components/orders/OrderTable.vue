@@ -64,7 +64,7 @@ const filteredMyOrders = computed(() => {
     <div class="mx-2 mt-2">
       <div class="row">
         <div class="col-5" v-for="order in filteredOrders" :key="order.id">
-          <div class="card mb-3">
+          <div class="card mb-3" style="min-width: 208px; min-height: 209px;">
             <div class="card-body">
               <h5 class="card-title">Order #{{ order.ticket_number }}</h5>
               <p class="mb-4"></p>
@@ -81,12 +81,14 @@ const filteredMyOrders = computed(() => {
           </div>
         </div>
         <div class="col-5" v-for="order in filteredMyOrders" :key="order.id">
-          <div class="card mb-3">
+          <div class="card mb-3" style="min-width: 208px; min-height: 209px;">
             <div class="card-body">
               <h5 class="card-title">Order #{{ order.ticket_number }}</h5>
+              <p class="mb-4"></p>
+              <p class="card-text">Status: {{ order.status_name }}</p>
               <p class="mb-3"></p>
               <p class="card-text">Distance: {{ order.distance }} km</p>
-              <p class="mb-3"></p>
+              <p class="mb-4"></p>
               <p class="card-text text-center">
                 <a class="btn btn-success text-light" @click="claimClick(order)"
                   v-if="(order.status == 'R' && order.driver_id == userStore.userId)">Claim</a><span

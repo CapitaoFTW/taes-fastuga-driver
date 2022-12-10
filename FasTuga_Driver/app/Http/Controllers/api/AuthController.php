@@ -30,7 +30,6 @@ class AuthController extends Controller
     }
 
     public function loginUser(AuthenticateUserRequest $request) {
-        $validated = $request->validated();
         return $this->login($request);
     }
 

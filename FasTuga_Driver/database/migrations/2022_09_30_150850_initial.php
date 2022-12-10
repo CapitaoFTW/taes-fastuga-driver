@@ -26,7 +26,9 @@ return new class extends Migration
             $table->enum('status', ['P', 'R', 'O', 'C', 'D']);
             // P "Preparing", R "Ready", O "Ongoing", C "Cancelled", D "Delivered"
             $table->decimal('total_price', 8, 2);
-            $table->string('distance');
+            $table->string('distance')->nullable();
+            $table->string('latitude');
+            $table->string('longitude');
             $table->integer('quantity')->unsigned();
             // The Driver that delivered the order
             // null if order was not delivered (status != "D")

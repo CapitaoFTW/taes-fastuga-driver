@@ -9,8 +9,6 @@ const axios = inject("axios")
 const toast = inject("toast")
 
 const orders = ref([])
-const filterByStatus = ref('P')
-const filterByMyStatus = ref('P')
 
 const loadOrders = () => {
   axios.get('orders')
@@ -63,7 +61,7 @@ const completeOrder = (order, user) => {
   if (order.delivered == 0) {
     order.delivered = 1
     order.status = 'D'
-  
+
   } else {
     order.delivered = 0
   }
@@ -94,19 +92,19 @@ const cancelOrder = (order) => {
 }
 
 const filteredOrders = computed(() => {
-  return orders.value.filter(p => (!filterByStatus.value || filterByStatus.value == p.status))
-})
-
-const filteredMyOrders = computed(() => {
-  return orders.value.filter(p => (!filterByMyStatus.value || filterByMyStatus.value == p.status))
+  return orders.value.filter(o => ('P' == o.status || 'R' == o.status))
 })
 
 const totalOrders = computed(() => {
-  return orders.value.filter(p => ('P' == p.status || 'R' == p.status))
+  return filteredOrders.value.length
+})
+
+const filteredMyOrders = computed(() => {
+  return orders.value.filter(o => ('P' == o.status || 'R' == o.status || 'O' == o.status))
 })
 
 const totalMyOrders = computed(() => {
-  return orders.value.length
+  return filteredMyOrders.value.length
 })
 
 onMounted(() => {
@@ -117,26 +115,15 @@ onMounted(() => {
 </script>
 
 <template>
-
   <div class="d-flex justify-content-between">
     <div class="mx-2">
       <h3 class="mt-4">Orders</h3>
     </div>
-  </div>
-  <hr>
-  <div class="mb-3 d-flex justify-content-start flex-wrap">
-    <div class="mx-2 mt-2 filter-div">
-      <label for="selectStatus" class="form-label">Filter by Status:</label>
-      <select class="form-select" id="selectStatus" v-model="filterByStatus">
-        <option :value="null" disabled>Choose a status</option>
-        <option value="P">Preparing</option>
-        <option value="R">Ready</option>
-        <!--<option value="O">Ongoing</option>
-        <option value="C">Cancelled</option>
-        <option value="D">Delivered</option>-->
-      </select>
+    <div class="mx-2 total-filtro">
+      <h5 class="mt-4">Total: {{ totalOrders }}</h5>
     </div>
   </div>
+  <hr>
   <order-table :orders="filteredOrders" :showMine="false" @show="showOrder" @accept="acceptOrder" @claim="claimOrder"
     @complete="completeOrder" @cancel="cancelOrder">
   </order-table>
@@ -145,30 +132,17 @@ onMounted(() => {
     <div class="mx-2">
       <h3 class="mt-2">My Orders</h3>
     </div>
+    <!--<div class="mx-2 total-filtro">
+      <h5 class="mt-4">Total: {{ totalMyOrders }}</h5>
+    </div>-->
   </div>
   <hr>
-  <div class="mb-3 d-flex justify-content-start flex-wrap">
-    <div class="mx-2 mt-2 filter-div">
-      <label for="selectStatus" class="form-label">Filter by Status:</label>
-      <select class="form-select" id="selectStatus" v-model="filterByMyStatus">
-        <option :value="null" disabled>Choose a status</option>
-        <option value="P">Preparing</option>
-        <option value="R">Ready</option>
-        <option value="O">Ongoing</option>
-        <!--<option value="C">Cancelled</option>-->
-        <option value="D">Delivered</option>
-      </select>
-    </div>
-  </div>
-  <order-table :orders="filteredMyOrders" :showMine="true" @show="showOrder" @claim="claimOrder"
-    @complete="completeOrder" @cancel="cancelOrder">
+  <order-table :orders="filteredMyOrders" :showMine="true" @show="showOrder" @claim="claimOrder" @complete="completeOrder"
+    @cancel="cancelOrder">
   </order-table>
 </template>
 
 <style scoped>
-.filter-div {
-  min-width: 12rem;
-}
 
 .total-filtro {
   margin-top: 0.35rem;

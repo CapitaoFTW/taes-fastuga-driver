@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { useUserStore } from "../../stores/user.js"
 
 const userStore = useUserStore()
@@ -16,6 +16,10 @@ const props = defineProps({
 })
 
 const order = ref(props.order)
+
+const src = computed(() => {
+  return "https://www.google.com/maps/embed?pb=!1m26!1m12!1m3!1d196208.44058502177!2d-9.047226035076093!3d39.79001099953573!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m11!3e6!4m4!2s39.735356%20-8.821473!3m2!1d39.735356!2d-8.821473!4m4!2s" + order.value.latitude + "%20" + order.value.longitude + "!3m2!1d" + order.value.latitude + "!2d" + order.value.longitude + "!5e0!3m2!1spt-PT!2spt!4v1670546580255!5m2!1spt-PT!2spt"
+})
 
 watch(
   () => props.order,
@@ -75,14 +79,18 @@ const cancelClick = () => {
       <h5><b>{{ order.distance <= 3 ? '2.00' : order.distance <= 10 ? '3.00' : '4.00' }} €</b>
       </h5>
     </div>
-    <div class="d-flex justify-content-center">
+    <iframe class="mb-4" :src="src" width="480" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+    <div class="d-flex justify-content-center mb-4 pb-2">
       <a class="btn btn-primary" @click="backClick">Back</a>&nbsp;
       <a class="btn btn-success" @click="acceptClick(userStore.userId)"
         v-if="(order.accepted == 0 && (order.status == 'P' || order.status == 'R'))">Accept</a>
       <a class="btn btn-success text-light" @click="claimClick"
         v-if="(order.status == 'R' && order.driver_id == userStore.userId)">Claim</a>
       <a class="btn btn-success text-light" @click="completedClick(userStore.user)"
-        v-if="(order.status == 'O' && order.driver_id == userStore.userId)">Complete</a><span v-if="(order.status == 'O' && order.driver_id == userStore.userId)">&nbsp;</span>
+        v-if="(order.status == 'O' && order.driver_id == userStore.userId)">Complete</a><span
+        v-if="(order.status == 'O' && order.driver_id == userStore.userId)">&nbsp;</span>
       <a class="btn btn-danger" @click="cancelClick"
         v-if="(order.status == 'O' && order.driver_id == userStore.userId)">Cancel</a>
     </div>

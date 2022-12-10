@@ -52,6 +52,7 @@ class OrdersSeeder extends Seeder
             $ordersDay = [];
             for ($num = 0; $num < $totalOrdersDay; $num++) {
                 $ordersDay[] = $this->createOrderArray($faker, $d, $num);
+                $ordersDay[$num]['distance'] = round(12742*asin(sqrt((sin((deg2rad($ordersDay[$num]['latitude'])-deg2rad(39.735356))/2))**2 + cos(deg2rad(39.735356))*cos(deg2rad($ordersDay[$num]['latitude']))*(sin((deg2rad($ordersDay[$num]['longitude']) - deg2rad(-8.821473))/2))**2)),1);
             }
             DB::table('orders')->insert($ordersDay);
             DB::table('orders')->where('date', $d->format('Y-m-d'))->pluck('id')->toArray();
@@ -72,10 +73,10 @@ class OrdersSeeder extends Seeder
             'status' => $faker->randomElement(['P','R','C']),
             'ticket_number' => $orderNumberOfDay % 99 + 1,
             'total_price' => $faker->randomFloat(2, 0, 50),
-            'distance' => $faker->randomFloat(1, 1, 100) . '0',
             'quantity' => $faker->randomNumber(2, false),
             'driver_id' => NULL,
-
+            'latitude' => $faker->latitude($min = 39.5, $max = 40),
+            'longitude' => $faker->longitude($min = -9, $max = -8.5),
             'date' =>  $day->format('Y-m-d'),
             'created_at' => $inicio,
             'updated_at' => $fim

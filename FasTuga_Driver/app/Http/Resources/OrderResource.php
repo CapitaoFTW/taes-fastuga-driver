@@ -22,6 +22,8 @@ class OrderResource extends JsonResource
             'total_price' => $this->total_price,
             'distance' => $this->distance,
             'quantity' => $this->quantity,
+            'latitude' => $this->latitude,
+            'longitude' => $this->longitude,
             'driver_id' => $this->driver_id,
             'driver' => $this->user->name ?? null,
             'accepted' => $this->accepted,

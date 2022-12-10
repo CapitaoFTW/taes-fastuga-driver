@@ -59,7 +59,6 @@ const save = () => {
       user.value = response.data.data
       originalValueStr = dataAsString()
       toast.success('User was updated successfully.')
-      userStore.user = user.value
       userStore.loadUser()
     })
 

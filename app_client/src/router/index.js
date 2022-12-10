@@ -1,12 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useUserStore } from "../stores/user.js"
 
-import HomeView from '../views/HomeView.vue'
-
-import Dashboard from "../components/Dashboard.vue"
 import Login from "../components/auth/Login.vue"
 import Register from "../components/auth/Register.vue"
 import ChangePassword from "../components/auth/ChangePassword.vue"
+import Statistics from "../components/Statistics.vue"
 import Orders from "../components/orders/Orders.vue"
 import Order from "../components/orders/Order.vue"
 import Users from "../components/users/Users.vue"
@@ -18,8 +16,13 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'Dashboard',
-      component: Dashboard
+      name: 'Orders',
+      component: Orders
+    },
+    {
+      path: '/stats',
+      name: 'Statistics',
+      component: Statistics
     },
     {
       path: '/redirect/:redirectTo',
@@ -41,11 +44,6 @@ const router = createRouter({
       path: '/password',
       name: 'ChangePassword',
       component: ChangePassword
-    },
-    {
-      path: '/orders',
-      name: 'Orders',
-      component: Orders,
     },
     {
       path: '/orders/new',
@@ -103,11 +101,6 @@ router.beforeEach((to, from, next) => {
   }
 
   const userStore = useUserStore()
-  
-  if (to.name == 'Dashboard') {
-    next({ name: 'Orders' })
-    return
-  }
 
   if (userStore.user && (to.name == 'Register' || to.name == 'Login')) {
     next({ name: 'Orders' })
@@ -131,7 +124,7 @@ router.beforeEach((to, from, next) => {
     }
   }
 
-  if (to.name != 'Register' && to.name != 'Login' && to.name != 'ChangePassword' && to.name != 'Orders' && to.name != 'NewOrder'
+  if (to.name != 'Statistics' && to.name != 'Register' && to.name != 'Login' && to.name != 'ChangePassword' && to.name != 'Orders' && to.name != 'NewOrder'
   && to.name != 'Order' && to.name != 'Users' && to.name != 'User' && to.name != 'Reports' && to.name != 'about') {
     next({ name: 'Orders' })
     return

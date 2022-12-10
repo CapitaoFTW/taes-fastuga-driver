@@ -15,8 +15,11 @@ class Order extends Model
         'total_price',
         'distance',
         'quantity',
+        'latitude',
+        'longitude',
         'driver_id',
         'accepted',
+        'delivered',
     ];
 
     public function getStatusNameAttribute()
