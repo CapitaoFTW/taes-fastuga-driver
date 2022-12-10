@@ -63,7 +63,7 @@ const filteredMyOrders = computed(() => {
   <div class="mb-3 d-flex justify-content-between flex-wrap">
     <div class="mx-2 mt-2">
       <div class="row">
-        <div class="col-5" v-for="order in filteredOrders" :key="order.id">
+        <div class="col-6" v-for="order in filteredOrders" :key="order.id">
           <div class="card mb-3" style="min-width: 208px; min-height: 209px;">
             <div class="card-body">
               <h5 class="card-title">Order #{{ order.ticket_number }}</h5>
@@ -80,7 +80,7 @@ const filteredMyOrders = computed(() => {
             </div>
           </div>
         </div>
-        <div class="col-5" v-for="order in filteredMyOrders" :key="order.id">
+        <div class="col-6" v-for="order in filteredMyOrders" :key="order.id">
           <div class="card mb-3" style="min-width: 208px; min-height: 209px;">
             <div class="card-body">
               <h5 class="card-title">Order #{{ order.ticket_number }}</h5>

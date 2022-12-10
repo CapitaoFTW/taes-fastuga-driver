@@ -8,29 +8,47 @@
     </div>
   </div>
   <hr>
-  <div class="d-flex justify-content-center">
-    <div class="w-75 mt-5">
-      <div class="mb-3">
-        <div class="mb-3">
-          <label for="inputCurrentPassword" class="form-label">Current Password</label>
-          <input type="password" class="form-control" id="inputCurrentPassword" disabled>
+  <div class="mb-3 d-flex justify-content-center flex-wrap">
+    <div class="mx-2 mt-5">
+      <div class="row justify-content-center mb-3">
+        <div class="col-6">
+          <p class="text-right mt-1">Orders Delivered</p>
+        </div>
+        <div class="col-3">
+          <input class="form-control" disabled>
         </div>
       </div>
-      <div class="mb-3">
-        <div class="mb-3">
-          <label for="inputPassword" class="form-label">New Password</label>
-          <input type="password" class="form-control" id="inputPassword" disabled>
+      <div class="row justify-content-center mb-3">
+        <div class="col-6">
+          <p class="text-right mt-1">Average Time Delivered</p>
+        </div>
+        <div class="col-3">
+          <input class="form-control" disabled>
         </div>
       </div>
-      <div class="mb-3">
-        <div class="mb-3">
-          <label for="inputPasswordConfirm" class="form-label">Password Confirmation</label>
-          <input type="password" class="form-control" id="inputPasswordConfirm" disabled>
-
+      <div class="row justify-content-center mb-3">
+        <div class="col-6">
+          <p class="text-right mt-1">Total Time Delivered</p>
+        </div>
+        <div class="col-3">
+          <input class="form-control" disabled>
         </div>
       </div>
-      <div class="mb-3 d-flex justify-content-center">
-        <button type="button" class="btn btn-primary" @click="changePassword">Change</button>
+      <div class="row justify-content-center mb-3">
+        <div class="col-6">
+          <p class="text-right mt-1">Total Earned</p>
+        </div>
+        <div class="col-3">
+          <input class="form-control" disabled>
+        </div>
+      </div>
+      <div class="row justify-content-center mb-3">
+        <div class="col-6">
+          <p class="text-right mt-1">Distinct Customers Served</p>
+        </div>
+        <div class="col-3">
+          <input class="form-control" disabled>
+        </div>
       </div>
     </div>
   </div>
