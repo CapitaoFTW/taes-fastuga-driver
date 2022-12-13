@@ -55,8 +55,8 @@ const clickMenuOption = () => {
               <li>
                 <router-link class="dropdown-item" :class="{ active: $route.name === 'ChangePassword' }"
                   :to="{ name: 'ChangePassword' }" @click="clickMenuOption">
-                  <i class="bi bi-key-fill"></i><span class="position-absolute"
-                    style="top: 3.6rem; left:3rem">Change Pass</span>
+                  <i class="bi bi-key-fill"></i><span class="position-absolute" style="top: 3.6rem; left:3rem">Change
+                    Pass</span>
                 </router-link>
               </li>
               <hr class="dropdown-divider" />
@@ -94,30 +94,7 @@ const clickMenuOption = () => {
             </a>
             <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink2">
               <li>
-                <a class="dropdown-item" :class="{ active: $route.name === 'Orders' }" :to="{ name: 'Orders' }"
-                  @click="clickMenuOption">
-                  <i class="bi bi-receipt"></i><span class="position-absolute"
-                    style="top: 1.1rem; left:3rem">Orders</span>
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item"
-                  :class="{ active: $route.name == 'User' && $route.params.id == userStore.userId }"
-                  :to="{ name: 'User', params: { id: userStore.userId } }" @click="clickMenuOption">
-                  <i class="bi bi-person-square"></i><span class="position-absolute"
-                    style="top: 3.6rem; left:3rem">Profile</span>
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" :class="{ active: $route.name === 'ChangePassword' }"
-                  :to="{ name: 'ChangePassword' }" @click="clickMenuOption">
-                  <i class="bi bi-key-fill"></i>Change password
-                </a>
-              </li>
-              <hr class="dropdown-divider" />
-              <li>
-                <a class="dropdown-item" href="#" @click.prevent="logout">
-                  <i class="bi bi-arrow-right"></i>Logout
+                <a class="dropdown-item" @click="clickMenuOption">Sem notificações
                 </a>
               </li>
             </ul>

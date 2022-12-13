@@ -95,16 +95,8 @@ const filteredOrders = computed(() => {
   return orders.value.filter(o => ('P' == o.status || 'R' == o.status))
 })
 
-const totalOrders = computed(() => {
-  return filteredOrders.value.length
-})
-
 const filteredMyOrders = computed(() => {
   return orders.value.filter(o => ('P' == o.status || 'R' == o.status || 'O' == o.status))
-})
-
-const totalMyOrders = computed(() => {
-  return filteredMyOrders.value.length
 })
 
 onMounted(() => {
@@ -119,9 +111,6 @@ onMounted(() => {
     <div class="mx-2">
       <h3 class="mt-4">Orders</h3>
     </div>
-    <div class="mx-2 total-filtro">
-      <h5 class="mt-4">Total: {{ totalOrders }}</h5>
-    </div>
   </div>
   <hr>
   <order-table :orders="filteredOrders" :showMine="false" @show="showOrder" @accept="acceptOrder" @claim="claimOrder"
@@ -132,9 +121,6 @@ onMounted(() => {
     <div class="mx-2">
       <h3 class="mt-2">My Orders</h3>
     </div>
-    <!--<div class="mx-2 total-filtro">
-      <h5 class="mt-4">Total: {{ totalMyOrders }}</h5>
-    </div>-->
   </div>
   <hr>
   <order-table :orders="filteredMyOrders" :showMine="true" @show="showOrder" @claim="claimOrder" @complete="completeOrder"
@@ -143,10 +129,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-
-.total-filtro {
-  margin-top: 0.35rem;
-}
 
 .btn-addprj {
   margin-top: 1.85rem;
